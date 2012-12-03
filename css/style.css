@@ -1,0 +1,14 @@
+*{
+	font-family:'helvetica';
+}
+.justice_path:hover{
+	stroke:red;
+}
+
+.axis>path{
+	fill:none;
+	stroke:black;
+	stroke-width: 2px;
+	shape-rendering: crispEdges;
+}
+
