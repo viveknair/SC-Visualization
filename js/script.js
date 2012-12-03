@@ -9,7 +9,8 @@ var h = 1200;
 var containerWidth = w - 200;
 var containerHeight = h - 200;
 var startingYear = 1970;
-var marginLeft = 60;
+var marginLeft = 100;
+var marginTop = 30;
 
 
 var x = d3.scale.linear().domain([-10, 10]).range([0, containerWidth]),
@@ -39,24 +40,47 @@ pathsContainer = svg.append('g')
 	.attr('transform', 'translate(' + marginLeft + ',0)')
 	.attr("class", "paths_container");
 
-pathsContainer.selectAll("path").data(data).enter().append("svg:path")
+pathsContainer.selectAll("line.x")
+  .data(x.ticks(10))
+  .enter().append("line")
+  .attr("transform", "translate(0," + marginTop + ")")
+  .attr("class", "x")
+  .attr("x1", x)
+  .attr("x2", x)
+  .attr("y1", 0)
+  .attr("y2", containerHeight)
+  .style("stroke", "#ccc");
+
+pathsContainer.selectAll("line.y")
+  .data(y.ticks(10))
+  .enter().append("line")
+  .attr("transform", "translate(0," + marginTop + ")")
+  .attr("class", "y")
+  .attr("x1", 0)
+  .attr("x2", containerWidth)
+  .attr("y1", y)
+  .attr("y2", y)
+  .style("stroke", "#ccc");
+
+pathsContainer.append("svg:g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(0," + marginTop + ")")
+	.call(xAxis);
+
+pathsContainer.append("svg:g")
+	.attr("class", "y axis")
+	.attr("transform", "translate(0," + marginTop + ")")
+	.call(yAxis);
+
+pathsContainer.selectAll("path.justice_path").data(data).enter().append("svg:path")
 	.attr("d", function(d,i){ console.log(line(d)); return line(d); })
 	.attr("class", "justice_path")
-	.attr("transform", "translate(0,40)")
+	.attr("transform", "translate(0," + marginTop + ")")
 	.style("stroke-width", 5)
   .style("stroke", "steelblue")
   .style("fill", "none")
   	.on("mouseover", function(){ d3.select(this).attr('stroke', 'red')});
 
-svg.append("svg:g")
-	.attr("class", "x axis")
-	.attr("transform", "translate(" + marginLeft + ", 30)")
-	.call(xAxis);
-
-svg.append("svg:g")
-	.attr("class", "y axis")
-	.attr("transform", "translate(50, 40)")
-	.call(yAxis);
 
 
 

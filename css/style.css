@@ -9,5 +9,6 @@
 	fill:none;
 	stroke:black;
 	stroke-width: 2px;
+	shape-rendering: crispEdges;
 }
 
