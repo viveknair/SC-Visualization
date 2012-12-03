@@ -1,22 +1,27 @@
 /* Author:
 
 */
+
+/* Constants */
+
 var w = 1000
 var h = 1200;
 var containerWidth = w - 200;
 var containerHeight = h - 200;
-
 var startingYear = 1970;
+var marginLeft = 60;
+
 
 var x = d3.scale.linear().domain([-10, 10]).range([0, containerWidth]),
     y = d3.scale.linear().domain([startingYear,startingYear + 10]).range([0, containerHeight]);
 
-data = [[{x: 0}, {x:0}, {x:1}, {x: 5},{x: 7}, {x: -4},{x:-2}, {x:1}, {x: 3},{x: 5}, {x: -2}],
-			[{x: -5}, {x:-5}, {x:-2}, {x: -3},{x: -1}, {x: -1},{x:2}, {x:1}, {x: 2},{x: 5}, {x: 6}]];
+data = [[{x: 0, year: 1970}, {x:0, year: 1971}, {x:1, year: 1972}, {x: 5, year: 1973},{x: 7, year: 1974}, {x: -4, year: 1975},{x:-2, year: 1976}, {x:1, year: 1977}, {x: 3, year: 1978},{x: 5, year: 1979}, {x: -2, year: 1980}],
+			[{x: -5, year: 1970}, {x:-5, year: 1971}, {x:-2, year: 1972}, {x: -3, year: 1973},{x: -1, year: 1974}, {x: -1, year: 1975},{x:2, year: 1976}, {x:1, year: 1977}, {x: 2, year: 1978},{x: 5, year: 1979}, {x: 6, year: 1980}],
+			[{x: -4, year: 1975},{x:-6, year: 1976}, {x:-10, year: 1977}, {x: -5, year: 1978},{x: -5, year: 1979}, {x: -6, year: 1980}]];
 
 var line = d3.svg.line()
     .x(function(d) { return x(d.x); })
-    .y(function(d,i) { return y(startingYear + i); })
+    .y(function(d,i) { return y(d.year); })
     .interpolate("cardinal")
     .tension(.75);
 
@@ -31,8 +36,8 @@ svg = d3.select("#chart")
 pathsContainer = svg.append('g')
 	.attr('width', containerWidth)
 	.attr('height', containerHeight)
-	.attr("class", "paths_container")
-	.on("mouseover", function(){ console.log("Ha")});
+	.attr('transform', 'translate(' + marginLeft + ',0)')
+	.attr("class", "paths_container");
 
 pathsContainer.selectAll("path").data(data).enter().append("svg:path")
 	.attr("d", function(d,i){ console.log(line(d)); return line(d); })
@@ -45,7 +50,7 @@ pathsContainer.selectAll("path").data(data).enter().append("svg:path")
 
 svg.append("svg:g")
 	.attr("class", "x axis")
-	.attr("transform", "translate(0, 30)")
+	.attr("transform", "translate(" + marginLeft + ", 30)")
 	.call(xAxis);
 
 svg.append("svg:g")
