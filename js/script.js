@@ -26,8 +26,8 @@ var line = d3.svg.line()
     .interpolate("cardinal")
     .tension(.75);
 
-var xAxis = d3.svg.axis().scale(x).orient("top");
-var yAxis = d3.svg.axis().scale(y).orient("left");
+var xAxis = d3.svg.axis().scale(x).orient("top").ticks(10),
+		yAxis = d3.svg.axis().scale(y).orient("left").ticks(10);
 
 svg = d3.select("#chart")
   .append("svg")
@@ -73,7 +73,7 @@ pathsContainer.append("svg:g")
 	.call(yAxis);
 
 pathsContainer.selectAll("path.justice_path").data(data).enter().append("svg:path")
-	.attr("d", function(d,i){ console.log(line(d)); return line(d); })
+	.attr("d", function(d,i){ return line(d); })
 	.attr("class", "justice_path")
 	.attr("transform", "translate(0," + marginTop + ")")
 	.style("stroke-width", 5)
