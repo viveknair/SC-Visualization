@@ -66,3 +66,16 @@ line.x{
 	-webkit-transition:opacity 1s;
 	-o-transition:opacity 1s;
 }
+
+#chart{
+	margin-top: 100px;
+}
+
+.fixed{
+	position:fixed;
+	background-color: white;
+}
+
+.top{
+	top:0;
+}

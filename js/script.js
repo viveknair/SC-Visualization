@@ -4,10 +4,14 @@
 
 /* Constants */
 
-var w = 1000
-var h = 1200;
-var containerWidth = w - 200;
-var containerHeight = h - 200;
+var w = 1000,
+    h = 1200,
+    containerWidth = w - 200,
+    containerHeight = h - 200;
+
+var scaleWidth = w;
+var scaleHeight = 30;
+
 var startingYear = 1970;
 var marginLeft = 100;
 var marginTop = 30;
@@ -45,6 +49,11 @@ svg = d3.select("#chart")
   .attr('width', w)
   .attr('height', h);
 
+topScale = d3.select("#fixed-scale")
+            .append("svg")
+            .attr('width', scaleWidth)
+            .attr('height', scaleHeight);
+
 pathsContainer = svg.append('g')
 	.attr('width', containerWidth)
 	.attr('height', containerHeight)
@@ -72,9 +81,9 @@ pathsContainer.selectAll("line.y")
   .attr("y1", y)
   .attr("y2", y);
 
-pathsContainer.append("svg:g")
+topScale.append("svg:g")
 	.attr("class", "x axis")
-	.attr("transform", "translate(0," + marginTop + ")")
+	.attr("transform", "translate(" + [marginLeft, marginTop] + ")")
 	.call(xAxis);
 
 pathsContainer.append("svg:g")
