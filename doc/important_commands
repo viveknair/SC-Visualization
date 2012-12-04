@@ -1,0 +1,2 @@
+# Changing the production environment information
+heroku pgbackups:restore DATABASE --confirm floating-fortress-1410 'http://3upd.localtunnel.com/DatabaseDumps/justices_pg.dump'

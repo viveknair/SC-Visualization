@@ -80,10 +80,3 @@ pathsContainer.selectAll("path.justice_path").data(data).enter().append("svg:pat
   .style("stroke", "steelblue")
   .style("fill", "none")
   	.on("mouseover", function(){ d3.select(this).attr('stroke', 'red')});
-
-
-
-
-
-
-
