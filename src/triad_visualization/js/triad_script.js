@@ -48,16 +48,21 @@ initializeTriadViz(caseName)
 
   var paths = constructTriadPaths(svg, data);
 
-  console.log("paths");
-  console.log(paths);
-
   for (var i = 0; i < paths.length; i ++) {
     svg.selectAll('path')
       .data(paths)
      .enter()
       .append('svg:path')
-      .attr('d', function(d,i) { return d; })
-      .attr('fill', 'white')
+      .attr('d', function(d,i) { return d.raw_path; })
+      .attr('fill', function(d, i) {
+        if (d.stable[0] == 0) {
+          return 'white';
+        } else if (d.stable[1] == 0) {
+          return 'turquoise'; 
+        } else {
+          return 'red';
+        }
+      })
       .attr('stroke', 'black');
   }
 
@@ -122,7 +127,24 @@ constructTriadPaths(svg, data)
     var y = [marginLeft, marginTop + distanceJudges + indDist * (i - 1)];
     var z = [w - marginRight, h / 2];
 
-    paths.push('M ' + x[0] + ' ' + x[1] + ' L ' + y[0] + ' ' + y[1] + ' L ' + z[0] + ' ' + z[1] + ' z');
+    // Assumption of regular stability
+    var stable = [0, 0];
+    if (data[i].leaning == data[i-1].leaning) {
+      if (data[i].vote != data[i-1].vote) {
+        // Negative instability
+        stable = [1, 1];
+      } 
+    } else {
+       if (data[i].vote == data[i-1].vote) {
+        // Positive instability
+        stable = [1, 0];
+      }  
+    }
+
+    paths.push({ 
+      stable : stable, 
+      raw_path : 'M ' + x[0] + ' ' + x[1] + ' L ' + y[0] + ' ' + y[1] + ' L ' + z[0] + ' ' + z[1] + ' z' 
+    });
   }
 
   return paths;
