@@ -38,7 +38,7 @@ pathsContainer = svg.append('g')
 	.attr('width', containerWidth)
 	.attr('height', containerHeight)
 	.attr('transform', 'translate(' + marginLeft + ',0)')
-	.attr("class", "paths_container");
+	.attr("class", "paths_container gradient");
 
 pathsContainer.selectAll("line.x")
   .data(x.ticks(10))
@@ -48,8 +48,7 @@ pathsContainer.selectAll("line.x")
   .attr("x1", x)
   .attr("x2", x)
   .attr("y1", 0)
-  .attr("y2", containerHeight)
-  .style("stroke", "#ccc");
+  .attr("y2", containerHeight);
 
 pathsContainer.selectAll("line.y")
   .data(y.ticks(10))
@@ -59,8 +58,7 @@ pathsContainer.selectAll("line.y")
   .attr("x1", 0)
   .attr("x2", containerWidth)
   .attr("y1", y)
-  .attr("y2", y)
-  .style("stroke", "#ccc");
+  .attr("y2", y);
 
 pathsContainer.append("svg:g")
 	.attr("class", "x axis")
@@ -76,9 +74,6 @@ pathsContainer.selectAll("path.justice_path").data(data).enter().append("svg:pat
 	.attr("d", function(d,i){ return line(d); })
 	.attr("class", "justice_path")
 	.attr("transform", "translate(0," + marginTop + ")")
-	.style("stroke-width", 5)
-  .style("stroke", "steelblue")
-  .style("fill", "none")
   	.on("mouseover", function(){ d3.select(this).attr('stroke', 'red')});
 
 

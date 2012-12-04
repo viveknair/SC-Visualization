@@ -1,3 +1,9 @@
+/* 
+
+Red: #DA0B2E
+Blue #1782CF
+*/
+
 *{
 	font-family:'helvetica';
 }
@@ -12,6 +18,14 @@
 	shape-rendering: crispEdges;
 }
 
+line.y{
+	stroke:#ccc;
+}
+
+line.x{
+	stroke:#ccc;
+}
+
 .gradient{
 	background: #da0b2e; /* Old browsers */
 	background: -moz-linear-gradient(left,  #da0b2e 0%, #ffffff 50%, #1782cf 100%); /* FF3.6+ */
@@ -21,4 +35,10 @@
 	background: -ms-linear-gradient(left,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* IE10+ */
 	background: linear-gradient(to right,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#da0b2e', endColorstr='#1782cf',GradientType=1 ); /* IE6-9 */
+}
+
+.justice_path{
+	stroke-width:10;
+  stroke:steelblue;
+  fill:none;
 }
