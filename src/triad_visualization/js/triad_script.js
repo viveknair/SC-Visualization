@@ -89,6 +89,16 @@ initializeTriadViz(caseName)
     .attr('r', function(d,i) { return circleRadius; })
     .attr('fill', 'steelblue')
 
+  var justices_names_shadow = justice_group
+    .append('svg:text')
+    .attr('transform', function(d,i) {
+      return 'translate(' + (-2 * circleRadius) + ',' + 0 + ')';
+    })
+    .attr('class', 'shadow')
+    .text(function(d,i) {
+      return d.name; 
+    }); 
+
   var justice_names = justice_group
     .append('svg:text')
     .attr('transform', function(d,i) {
