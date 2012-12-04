@@ -41,7 +41,7 @@ data = [[{x: 0, year: 1970}, {x:0, year: 1971}, {x:1, year: 1972}, {x: 5, year: 
 			[{x: -5, year: 1970}, {x:-5, year: 1971}, {x:-2, year: 1972}, {x: -3, year: 1973},{x: -1, year: 1974}, {x: -1, year: 1975},{x:2, year: 1976}, {x:1, year: 1977}, {x: 2, year: 1978},{x: 5, year: 1979}, {x: 6, year: 1980}],
 			[{x: -4, year: 1975},{x:-6, year: 1976}, {x:-10, year: 1977}, {x: -5, year: 1978},{x: -5, year: 1979}, {x: -6, year: 1980}]];
 
-var xAxis = d3.svg.axis().scale(x).orient("top").ticks(10),
+var xAxis = d3.svg.axis().scale(x).orient("top").ticks(10).tickFormat(d3.format(".0")),
 		yAxis = d3.svg.axis().scale(y).orient("left").ticks(10).tickFormat(d3.format(".0f"));
 
 svg = d3.select("#chart")
