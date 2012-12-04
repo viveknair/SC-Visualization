@@ -9,8 +9,9 @@ var w = 1000,
     containerWidth = w - 200,
     containerHeight = h - 200;
 
-var scaleWidth = w;
-var scaleHeight = 30;
+var scaleWidth = w,
+    scaleHeight = 30,
+    numTicks = 10;
 
 var startingYear = 1970;
 var marginLeft = 100;
@@ -62,7 +63,7 @@ pathsContainer = svg.append('g')
 
 //Add axes and grid lines 
 pathsContainer.selectAll("line.x")
-  .data(x.ticks(10))
+  .data(x.ticks(numTicks))
   .enter().append("line")
   .attr("transform", "translate(0," + marginTop + ")")
   .attr("class", "x")
@@ -72,7 +73,7 @@ pathsContainer.selectAll("line.x")
   .attr("y2", containerHeight);
 
 pathsContainer.selectAll("line.y")
-  .data(y.ticks(10))
+  .data(y.ticks(numTicks))
   .enter().append("line")
   .attr("transform", "translate(0," + marginTop + ")")
   .attr("class", "y")
@@ -80,6 +81,8 @@ pathsContainer.selectAll("line.y")
   .attr("x2", containerWidth)
   .attr("y1", y)
   .attr("y2", y);
+
+//Adding hoverable decades
 
 topScale.append("svg:g")
 	.attr("class", "x axis")
@@ -97,12 +100,22 @@ pathsContainer.append("svg:g")
 pathsContainer.append('path').datum(liberalData)
                 .attr('class', 'cases liberal')
                 .attr('d', function(d){ return liberalArea(d)})
-                .attr('transform', 'rotate(90) translate(' + [marginTop, -containerWidth] +')')
+                .attr('transform', 'rotate(90) translate(' + [marginTop, -containerWidth] +')');
 
 pathsContainer.append('path').datum(conservativeData)
                 .attr('class', 'cases conservative')
                 .attr('d', function(d){ return conservativeArea(d)})
-                .attr('transform', 'rotate(90) translate(' + [marginTop, -containerWidth] +')')
+                .attr('transform', 'rotate(90) translate(' + [marginTop, -containerWidth] +')');
+
+pathsContainer.selectAll("rect")
+  .data(y.ticks(numTicks))
+  .enter().append("rect")
+  .attr('class', 'decadeSelector')
+  .attr("transform", "translate(0," + marginTop + ")")
+  .attr("x", 0)
+  .attr("width", containerWidth)
+  .attr("y", function(d){ return y(d) - (containerHeight/numTicks)/2})
+  .attr("height", containerHeight/numTicks);  
 
 // pathsContainer.selectAll("path.justice_path").data(data).enter().append("svg:path")
 // 	.attr("d", function(d,i){ return line(d); })
