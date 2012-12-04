@@ -27,7 +27,7 @@ var line = d3.svg.line()
     .tension(.75);
 
 var xAxis = d3.svg.axis().scale(x).orient("top").ticks(10),
-		yAxis = d3.svg.axis().scale(y).orient("left").ticks(10);
+		yAxis = d3.svg.axis().scale(y).orient("left").ticks(10).tickFormat(d3.format(".0f"));
 
 svg = d3.select("#chart")
   .append("svg")
