@@ -46,7 +46,7 @@ initializeTriadViz(caseName)
     .attr('height', h);
 
   var paths = constructTriadPaths(svg, data, null);
-  drawTriadPaths(svg, paths);
+  drawTriadPaths(svg, paths[0]);
 
   var case_group = svg.append('svg:g')
     .attr('transform', function() {
@@ -106,7 +106,8 @@ initializeTriadViz(caseName)
     .on('click', function(d,i) {
       // Re-color the paths to match the relationships to that single node.
       var paths = constructTriadPaths(svg, data, [i, 1]);
-      drawTriadPaths(svg, paths); 
+      drawTriadPaths(svg, paths[0]); 
+      drawArrowPaths(svg, paths[1]); 
     });
 
   var justices_names_shadow = justice_group
@@ -131,9 +132,35 @@ initializeTriadViz(caseName)
 }
 
 function
+drawArrowPaths(svg, paths)
+{
+   console.log(paths);
+   var path_selector = svg.selectAll('path.justice_individual_relation')
+    .data(paths)
+
+   path_selector
+     .transition()
+     .duration(300)
+     .attr('d', function(d,i) { return d; })
+     .attr('fill', 'none')
+     .attr('stroke', '#555')
+     .attr('stroke-width', '1.5px'); 
+   
+  // Instantiating the new ones
+  path_selector
+   .enter()
+    .append('svg:path')
+    .attr('class', 'justice_individual_relation')
+    .attr('d', function(d,i) { return d; })
+    .attr('fill', 'none')
+    .attr('stroke', '#555')
+    .attr('stroke-width', '1.5px'); 
+}
+
+function
 drawTriadPaths(svg, paths) 
 {
-  var path_selector = svg.selectAll('path')
+  var path_selector = svg.selectAll('path.justice_case_relation')
     .data(paths)
 
   // Updating the elements
@@ -155,8 +182,8 @@ drawTriadPaths(svg, paths)
   path_selector
    .enter()
     .append('svg:path')
+    .attr('class', 'justice_case_relation')
     .attr('d', function(d,i) { return d.raw_path; })
-    .attr('class', function(d,i) { return 'path-' + i; })
     .attr('fill', function(d, i) {
       if (d.stable[0] == 0) {
         return 'white';
@@ -170,24 +197,21 @@ drawTriadPaths(svg, paths)
 }
 
 function
-constructNodeArrows(svg, consideration, current) 
+constructNodeArrow(svg, consideration, current) 
 {
 
    var indDist = (h - 2 * marginTop) / data.length;
-   var consideration_dev = marginTop + indDist * consideration;
-   var current_dev = marginTop + indDist * current;
+   var consideration_dev = marginTop + circleRadius + indDist * consideration;
+   var current_dev = marginTop + circleRadius + indDist * current;
 
-   svg.append('svg:path')
-    .attr("d", function() {
-      var dx = 0, dy = consideration_dev - current_dev,
-          dr = Math.sqrt(dx * dx + dy * dy);
+   var dx = 0, dy = consideration_dev - current_dev,
+       dr = Math.sqrt(dx * dx + dy * dy);
 
-      var pathQuery = "M" + consideration_dev + "," + current_dev + "A" + dr + "," + dr + " 0 0,1 " + consideration_dev + "," + current_dev;
+   dr = (consideration_dev < current_dev) ? dr * -1 : dr;
 
-      return pathQuery;
-    })
-    .attr('fill', 'black')
-    .style('stroke', 'black');
+   var pathQuery = "M " + marginLeft + " , " + consideration_dev +  " A " + dr + " , " + dr + " 0 0,1 " + marginLeft + "," + current_dev;
+
+   return pathQuery;
 }
 
 function 
@@ -195,11 +219,12 @@ constructTriadPaths(svg, data, particular)
 {
   var indDist = (h - 2 * marginTop) / data.length;
   var paths = [];
+  var arrow_paths = [];
 
   for (var i = 0; i < data.length; i ++) {
 
     if (particular && particular[0] != i) { 
-      constructNodeArrows(svg, particular[0], i);
+      arrow_paths.push( constructNodeArrow(svg, particular[0], i) );
     }
 
     if (i == 0) continue;
@@ -230,7 +255,7 @@ constructTriadPaths(svg, data, particular)
     });
   }
 
-  return paths;
+  return [paths, arrow_paths];
 }
 
 $(document).ready(initializeTriadViz("test"));
