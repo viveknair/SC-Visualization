@@ -28,11 +28,11 @@ var circleRadius = 20;
 //  -> vote is either 0 or 1 (conservative or liberal)
 
 var data = [
-  {name: "Monkey", leaning: 1, vote: 1},
-  {name: "Brains", leaning: 0, vote: 0},
-  {name: "Contro", leaning: 1, vote: 0},
-  {name: "Smang", leaning: 0, vote: 1},
-  {name: "Sauce", leaning: 1, vote: 1},
+  { name: "Monkey", leaning: 1, vote: 1 },
+  { name: "Brains", leaning: 0, vote: 0 },
+  { name: "Contro", leaning: 1, vote: 0 },
+  { name: "Smang",  leaning: 0, vote: 1  },
+  { name: "Sauce",  leaning: 1, vote: 1  },
 ]
 
 function 
@@ -40,7 +40,6 @@ initializeTriadViz(caseName)
 {
 
   // Search the caseName via the API and set it as the data variable
-
   var svg = d3.select("#chart")
     .append("svg:svg")
     .attr('width', w)
@@ -52,16 +51,17 @@ initializeTriadViz(caseName)
   var case_group = svg.append('svg:g')
     .attr('transform', function() {
       return 'translate(' + (w - marginRight) + ',' + h / 2 + ')';
-    })
+    });
 
   var case_circle = case_group.append('svg:circle')
+    .attr('class',  function() { return 'case-' + caseName; })
     .attr('r', function() { return circleRadius; })
-    .attr('fill', 'steelblue')
+    .attr('fill', 'steelblue');
 
   var total_justice_group = svg.append('svg:g')
     .attr('transform', function() {
       return 'translate(' + marginLeft + ',' + distanceJudges + ')';
-    })
+    });
 
   var justice_group = total_justice_group
     .selectAll('g')
@@ -69,8 +69,8 @@ initializeTriadViz(caseName)
     .enter().append('svg:g')
     .attr('transform', function(d,i) {
       var indDist = (h - 2 * marginTop) / data.length;
-      return 'translate(' + 0 + ',' + (marginTop + indDist * i) + ')'
-    })
+      return 'translate(' + 0 + ',' + (marginTop + indDist * i) + ')';
+    });
 
   var justice_circles = justice_group
     .append('svg:circle')
@@ -83,8 +83,9 @@ initializeTriadViz(caseName)
       d3.selectAll('circle')
         .each(function() {
           current_circle = d3.select(this);
-        
-          if (current_circle.attr('class') != 'circle-' + i) {
+       
+          class_current_circle = current_circle.attr('class'); 
+          if (class_current_circle != 'circle-' + i && class_current_circle != 'case-' + caseName) {
             current_circle
               .transition()
               .duration(300)
@@ -105,7 +106,7 @@ initializeTriadViz(caseName)
     .on('click', function(d,i) {
       // Re-color the paths to match the relationships to that single node.
       var paths = constructTriadPaths(svg, data, [i, 1]);
-      drawTriadPaths(svg, paths);
+      drawTriadPaths(svg, paths); 
     });
 
   var justices_names_shadow = justice_group
@@ -140,13 +141,13 @@ drawTriadPaths(svg, paths)
    .transition()
    .duration(300)
    .attr('fill', function(d, i) {
-      if (d.stable[0] == 0) {
-        return 'white';
-      } else if (d.stable[1] == 0) {
-        return 'turquoise'; 
-      } else {
-        return 'red';
-      }
+     if (d.stable[0] == 0) {
+       return 'white';
+     } else if (d.stable[1] == 0) {
+       return 'turquoise'; 
+     } else {
+       return 'red';
+     }
     })
     .attr('stroke', 'black');
    
@@ -168,6 +169,27 @@ drawTriadPaths(svg, paths)
     .attr('stroke', 'black');
 }
 
+function
+constructNodeArrows(svg, consideration, current) 
+{
+
+   var indDist = (h - 2 * marginTop) / data.length;
+   var consideration_dev = marginTop + indDist * consideration;
+   var current_dev = marginTop + indDist * current;
+
+   svg.append('svg:path')
+    .attr("d", function() {
+      var dx = 0, dy = consideration_dev - current_dev,
+          dr = Math.sqrt(dx * dx + dy * dy);
+
+      var pathQuery = "M" + consideration_dev + "," + current_dev + "A" + dr + "," + dr + " 0 0,1 " + consideration_dev + "," + current_dev;
+
+      return pathQuery;
+    })
+    .attr('fill', 'black')
+    .style('stroke', 'black');
+}
+
 function 
 constructTriadPaths(svg, data, particular) 
 {
@@ -175,6 +197,11 @@ constructTriadPaths(svg, data, particular)
   var paths = [];
 
   for (var i = 0; i < data.length; i ++) {
+
+    if (particular && particular[0] != i) { 
+      constructNodeArrows(svg, particular[0], i);
+    }
+
     if (i == 0) continue;
     var x = [marginLeft, marginTop + distanceJudges + indDist * i];
     var y = [marginLeft, marginTop + distanceJudges + indDist * (i - 1)];
@@ -183,7 +210,7 @@ constructTriadPaths(svg, data, particular)
     // Assumption of regular stability
     var stable = [0, 0];
     consideration_value = (particular != null && particular[0] != i) ? particular[0]  : i-1;
-
+ 
     if (data[i].leaning == data[consideration_value].leaning) {
       if (data[i].vote != data[consideration_value].vote) {
         // Negative instability
