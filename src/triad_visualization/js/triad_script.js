@@ -46,25 +46,8 @@ initializeTriadViz(caseName)
     .attr('width', w)
     .attr('height', h);
 
-  var paths = constructTriadPaths(svg, data);
-
-  for (var i = 0; i < paths.length; i ++) {
-    svg.selectAll('path')
-      .data(paths)
-     .enter()
-      .append('svg:path')
-      .attr('d', function(d,i) { return d.raw_path; })
-      .attr('fill', function(d, i) {
-        if (d.stable[0] == 0) {
-          return 'white';
-        } else if (d.stable[1] == 0) {
-          return 'turquoise'; 
-        } else {
-          return 'red';
-        }
-      })
-      .attr('stroke', 'black');
-  }
+  var paths = constructTriadPaths(svg, data, null);
+  drawTriadPaths(svg, paths);
 
   var case_group = svg.append('svg:g')
     .attr('transform', function() {
@@ -93,6 +76,37 @@ initializeTriadViz(caseName)
     .append('svg:circle')
     .attr('r', function(d,i) { return circleRadius; })
     .attr('fill', 'steelblue')
+    .attr('class', function(d,i) {    
+      return 'circle-' + i;
+    })
+    .on('mouseover', function(d,i) {
+      d3.selectAll('circle')
+        .each(function() {
+          current_circle = d3.select(this);
+        
+          if (current_circle.attr('class') != 'circle-' + i) {
+            current_circle
+              .transition()
+              .duration(300)
+              .style('opacity', 0.75); 
+          }
+        })
+    })
+    .on('mouseout', function(d,i) {
+      d3.selectAll('circle')
+        .each(function() {
+          current_circle = d3.select(this);
+          current_circle
+            .transition()
+            .duration(300)
+            .style('opacity', 1.0); 
+        })
+    })
+    .on('click', function(d,i) {
+      // Re-color the paths to match the relationships to that single node.
+      var paths = constructTriadPaths(svg, data, [i, 1]);
+      drawTriadPaths(svg, paths);
+    });
 
   var justices_names_shadow = justice_group
     .append('svg:text')
@@ -115,8 +129,47 @@ initializeTriadViz(caseName)
 
 }
 
+function
+drawTriadPaths(svg, paths) 
+{
+  var path_selector = svg.selectAll('path')
+    .data(paths)
+
+  // Updating the elements
+  path_selector
+   .transition()
+   .duration(300)
+   .attr('fill', function(d, i) {
+      if (d.stable[0] == 0) {
+        return 'white';
+      } else if (d.stable[1] == 0) {
+        return 'turquoise'; 
+      } else {
+        return 'red';
+      }
+    })
+    .attr('stroke', 'black');
+   
+  // Instantiating the new ones
+  path_selector
+   .enter()
+    .append('svg:path')
+    .attr('d', function(d,i) { return d.raw_path; })
+    .attr('class', function(d,i) { return 'path-' + i; })
+    .attr('fill', function(d, i) {
+      if (d.stable[0] == 0) {
+        return 'white';
+      } else if (d.stable[1] == 0) {
+        return 'turquoise'; 
+      } else {
+        return 'red';
+      }
+    })
+    .attr('stroke', 'black');
+}
+
 function 
-constructTriadPaths(svg, data) 
+constructTriadPaths(svg, data, particular) 
 {
   var indDist = (h - 2 * marginTop) / data.length;
   var paths = [];
@@ -129,17 +182,20 @@ constructTriadPaths(svg, data)
 
     // Assumption of regular stability
     var stable = [0, 0];
-    if (data[i].leaning == data[i-1].leaning) {
-      if (data[i].vote != data[i-1].vote) {
+    consideration_value = (particular != null && particular[0] != i) ? particular[0]  : i-1;
+
+    if (data[i].leaning == data[consideration_value].leaning) {
+      if (data[i].vote != data[consideration_value].vote) {
         // Negative instability
         stable = [1, 1];
       } 
     } else {
-       if (data[i].vote == data[i-1].vote) {
+       if (data[i].vote == data[consideration_value].vote) {
         // Positive instability
         stable = [1, 0];
       }  
     }
+
 
     paths.push({ 
       stable : stable, 
