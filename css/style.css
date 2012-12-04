@@ -7,9 +7,10 @@ Blue #1782CF
 *{
 	font-family:'helvetica';
 }
+/*
 .justice_path:hover{
-	stroke:red;
-}
+	stroke:#DA0B2E;
+}*/
 
 .axis>path{
 	fill:none;
@@ -37,8 +38,14 @@ line.x{
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#da0b2e', endColorstr='#1782cf',GradientType=1 ); /* IE6-9 */
 }
 
-.justice_path{
-	stroke-width:10;
-  stroke:steelblue;
-  fill:none;
+.cases{
+  stroke:none;
+}
+
+.liberal{
+	fill:#1782CF;
+}
+
+.conservative{
+	fill:#DA0B2E;
 }
