@@ -118,15 +118,7 @@ pathsContainer.selectAll("rect")
   .attr("x", 0)
   .attr("width", containerWidth)
   .attr("y", function(d,i){ return y(d) - (containerHeight/numTicks)/2})
-  .attr("height", function(d,i){ if(i === 0 || i === numTicks - 1) { return containerHeight/numTicks/2; } else return containerHeight/numTicks;);  
+  .attr("height", function(d,i){ if(i === 0 || i === numTicks - 1) { return containerHeight/numTicks/2; } else return containerHeight/numTicks;})  
   .on('click', function(d){
     console.log("Clicked data point: " + d);
   });
-
-
-
-
-
-
-
-
