@@ -12,3 +12,13 @@
 	shape-rendering: crispEdges;
 }
 
+.gradient{
+	background: #da0b2e; /* Old browsers */
+	background: -moz-linear-gradient(left,  #da0b2e 0%, #ffffff 50%, #1782cf 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#da0b2e), color-stop(50%,#ffffff), color-stop(100%,#1782cf)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* IE10+ */
+	background: linear-gradient(to right,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#da0b2e', endColorstr='#1782cf',GradientType=1 ); /* IE6-9 */
+}

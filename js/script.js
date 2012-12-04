@@ -23,7 +23,7 @@ data = [[{x: 0, year: 1970}, {x:0, year: 1971}, {x:1, year: 1972}, {x: 5, year: 
 var line = d3.svg.line()
     .x(function(d) { return x(d.x); })
     .y(function(d,i) { return y(d.year); })
-    .interpolate("cardinal")
+    .interpolate("basis")
     .tension(.75);
 
 var xAxis = d3.svg.axis().scale(x).orient("top").ticks(10),
