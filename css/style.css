@@ -1,9 +1,15 @@
+/* 
+Red: #DA0B2E
+Blue #1782CF
+*/
+
 *{
 	font-family:'helvetica';
 }
+/*
 .justice_path:hover{
-	stroke:red;
-}
+	stroke:#DA0B2E;
+}*/
 
 .axis>path{
 	fill:none;
@@ -12,3 +18,81 @@
 	shape-rendering: crispEdges;
 }
 
+line.y{
+	stroke:#ddd;
+}
+
+line.x{
+	stroke:#ddd;
+}
+
+.gradient{
+	background: #da0b2e; /* Old browsers */
+	background: -moz--gradient(left,  #da0b2e 0%, #ffffff 50%, #1782cf 100%); /* FF3.6+ */
+	background: -webkit-gradient(, left top, right top, color-stop(0%,#da0b2e), color-stop(50%,#ffffff), color-stop(100%,#1782cf)); /* Chrome,Safari4+ */
+	background: -webkit--gradient(left,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* Chrome10+,Safari5.1+ */
+	background: -o--gradient(left,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* Opera 11.10+ */
+	background: -ms--gradient(left,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* IE10+ */
+	background: -gradient(to right,  #da0b2e 0%,#ffffff 50%,#1782cf 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#da0b2e', endColorstr='#1782cf',GradientType=1 ); /* IE6-9 */
+}
+
+.cases{
+  stroke:none;
+
+}
+.cases:hover{
+	opacity: 1;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
+}
+.liberal{
+	fill:#1782CF;
+	opacity: .7;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
+}
+
+.conservative{
+	fill:#DA0B2E;
+	opacity: .7;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
+}
+
+#chart{
+	margin-top: 100px;
+}
+
+.fixed{
+	position:fixed;
+	background-color: white;
+}
+
+.top{
+	top:0;
+}
+
+.decadeSelector{
+	cursor:pointer;
+	opacity:.05;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
+}
+
+.decadeSelector:hover{
+	cursor:pointer;
+	opacity: 0;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
+}
