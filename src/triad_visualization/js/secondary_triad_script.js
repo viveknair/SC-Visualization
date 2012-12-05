@@ -29,11 +29,15 @@ var circleRadius = 20;
 
 //======> Start Test Data
 var data = [
-  { name: "Monkey", leaning: 1, vote: 1 },
-  { name: "Brains", leaning: 0, vote: 0 },
-  { name: "Contro", leaning: 1, vote: 0 },
-  { name: "Smang",  leaning: 0, vote: 1  },
-  { name: "Sauce",  leaning: 1, vote: 1  }
+  { chief: 0, leaning: 1, direction: 1, name: "FFrankfurter" },
+  { chief: 1, leaning: 0, direction: 1, name: "FMVinson" },
+  { chief: 0, leaning: 1, direction: 2, name: "FMurphy" },
+  { chief: 0, leaning: 0, direction: 1, name: "HHBurton" },
+  { chief: 0, leaning: 1, direction: 1, name: "HLBlack" },
+  { chief: 0, leaning: 0, direction: 1, name: "RHJackson" },
+  { chief: 0, leaning: 0, direction: 1, name: "SFReed" },
+  { chief: 0, leaning: 1, direction: 1, name: "WBRutledge" },
+  { chief: 0, leaning: 1, direction: 2, name: "WODouglas" }
 ]
 
 var caseX = w / 2;
@@ -56,9 +60,7 @@ constructTriadData(data)
 
       if (data[i].leaning != data[j].leaning && data[i].vote == data[j].vote)  {
         triadRelation.stable = 2;
-      }
-      
-      if (data[i].leaning == data[j].leaning && data[i].vote != data[j].vote) {
+      } else if (data[i].leaning == data[j].leaning && data[i].vote != data[j].vote) {
         triadRelation.stable = 3;
       }   
       
@@ -154,7 +156,9 @@ initializeTriadViz(caseName)
    .enter().append('svg:circle')
     .attr({
       r: circleRadius,
-      fill: 'black',
+      fill: function(d,i) {
+        return (d.chief == 1) ? 'steelblue' : 'black';
+      },
       class: 'justiceCircle',
       id: function(d,i) {
         return 'justiceCircle-' + i; 
@@ -163,6 +167,9 @@ initializeTriadViz(caseName)
         // Setting the data location
         return 'translate(' + (d.x) + ',' + (d.y) + ')';
       }
+    })
+    .style({
+      stroke: 'black'
     })
     .on('mouseover', function(cd,ci) {
       triadPaths  
