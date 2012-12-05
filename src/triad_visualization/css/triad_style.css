@@ -38,6 +38,9 @@ text.shadow {
 
 .stability_result {
   font-size: 20px; 
+  position: relative;
+  top: 50px;
+  left: 80px;
 }
 
 .stable {
@@ -50,4 +53,12 @@ text.shadow {
 
 .unstable_n {
   color: '#CC1133';
+}
+
+.justice_listing {
+  list-style-type: none;
+}
+
+.justice_listing li {
+  padding: 10px;
 }

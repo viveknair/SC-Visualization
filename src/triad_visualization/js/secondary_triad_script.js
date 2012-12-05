@@ -181,6 +181,7 @@ initializeTriadViz(caseName)
         return 'translate(' + d.x + ',' + d.y + ')';
       }
     })
+    .style('stroke', '#000')
 
   var caseShadowText = justiceGrouping
     .selectAll('text.caseShadowText')
@@ -236,12 +237,19 @@ initializeTriadViz(caseName)
       stroke: 'black'
     })
     .on('mouseover', function(cd,ci) {
+      clearPathText();
       triadPaths  
+        .transition()
+        .duration(300)
         .style('opacity', function(d,i) {
           return (d.tindex == ci || d.sindex == ci) ? 1.0 : 0.0; 
         });
+
+      updateBatchPathText(triadPaths, ci);
+      brightPathText();
     })
     .on('mouseout', function(cd,ci) {
+      opaquePathText();
       triadPaths
         .transition()
         .duration(300)
@@ -287,7 +295,7 @@ initializeTriadViz(caseName)
 function
 opaquePathText() 
 {
-  d3.select('#explanation_text').style('opacity', 0.2);
+  d3.select('#explanation_text').style('opacity', 0.5);
 }
 
 function
@@ -322,6 +330,32 @@ updatePathText(triadRelation)
 }
 
 function
+updateBatchPathText(triadPaths, ci)
+{
+  var constructedString = "<h3> <span class = 'individual_justice' > Justice " + data[ci].name + "has a(n): </h3><ul class = 'justice_listing'>" ; 
+
+  triadPaths.each(function(d,i) {
+    var otherIndex = null;
+    if (ci == d.sindex || ci == d.tindex) {
+      otherIndex = (ci == d.sindex) ? d.tindex : d.sindex;   
+    }
+
+    if (otherIndex != null) {
+      var stability = "stable ";
+      if (d.stable == 2) {
+        stability = "unstable (positive) ";
+      } else if (d.stable == 3) {
+        stability = "unstable (negative) ";
+      }
+      constructedString += "<li>" + stability + "relationship with <span class = 'individual_justice'>" + data[otherIndex].name + "</span></li>";
+    }
+  })
+  
+  constructedString += "</ul>"
+  $('#explanation_text').append(constructedString);
+}
+
+function
 triadPathsCalculate(triadPaths, justiceGrouping)
 {
   triadPaths.enter().append('svg:path')
@@ -347,16 +381,6 @@ triadPathsCalculate(triadPaths, justiceGrouping)
           return (i == ci) ? 1.0 : 0.0;
         });
     
-      justiceCircles
-        .attr('fill', function(d,i) {
-          var resultingColor = (i != cd.sindex && i != cd.tindex) ? '#AAA' : custom_color(i);
-          if (resultingColor != custom_color(i)) {
-            resultingColor = (d.chief == 1) ? 'steelblue' : custom_color(i);
-          }
-
-          return resultingColor;
-        });
-
       updatePathText(cd);
       $('#explanation_text')  
     })
