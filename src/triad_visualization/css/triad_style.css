@@ -9,6 +9,18 @@ h1,h2,h3,h4,h5,h6,div{
   margin-bottom:0;
 }
 
+li.stable {
+  color: 'green';
+}
+
+li.unstable_p {
+  color: '#000';
+}
+
+li.unstable_n {
+  color: '#CC1133';
+}
+
 #chart {
   position: relative;
   width: 600px;
@@ -43,16 +55,9 @@ text.shadow {
   left: 80px;
 }
 
-.stable {
-  color: 'green';
-}
-
-.unstable_p {
-  color: '#000';
-}
-
-.unstable_n {
-  color: '#CC1133';
+.justice_listing li:hover {
+  cursor: pointer;
+  background-color: #f9f9f9;
 }
 
 .justice_listing {
@@ -60,5 +65,5 @@ text.shadow {
 }
 
 .justice_listing li {
-  padding: 10px;
+  padding: 8px;
 }

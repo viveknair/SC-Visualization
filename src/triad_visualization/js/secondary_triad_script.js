@@ -221,6 +221,20 @@ initializeTriadViz(caseName)
   justiceCircles.enter().append('svg:circle')
     .attr({
       r: circleRadius,
+      fill: 'white',
+      class: 'white_justiceCircle',
+      id: function(d,i) {
+        return 'white_justiceCircle-' + i; 
+      },
+      transform: function(d,i) {
+        // Setting the data location
+        return 'translate(' + (d.x) + ',' + (d.y) + ')';
+      }
+    })
+
+  justiceCircles.enter().append('svg:circle')
+    .attr({
+      r: circleRadius,
       fill: function(d,i) {
         return (d.chief == 1) ? 'steelblue' : custom_color(i);
       },
@@ -249,7 +263,6 @@ initializeTriadViz(caseName)
       brightPathText();
     })
     .on('mouseout', function(cd,ci) {
-      opaquePathText();
       triadPaths
         .transition()
         .duration(300)
@@ -332,9 +345,11 @@ updatePathText(triadRelation)
 function
 updateBatchPathText(triadPaths, ci)
 {
-  var constructedString = "<h3> <span class = 'individual_justice' > Justice " + data[ci].name + "has a(n): </h3><ul class = 'justice_listing'>" ; 
-
+  var constructedString = "<h3> <span class = 'individual_justice' > Justice " + data[ci].name + " has a(n): </h3><ul class = 'justice_listing'></ul>" ; 
+  $('#explanation_text').append(constructedString);
+  var listElements = [];
   triadPaths.each(function(d,i) {
+    var listElement = {}
     var otherIndex = null;
     if (ci == d.sindex || ci == d.tindex) {
       otherIndex = (ci == d.sindex) ? d.tindex : d.sindex;   
@@ -347,12 +362,56 @@ updateBatchPathText(triadPaths, ci)
       } else if (d.stable == 3) {
         stability = "unstable (negative) ";
       }
-      constructedString += "<li>" + stability + "relationship with <span class = 'individual_justice'>" + data[otherIndex].name + "</span></li>";
+      var tempString = "<li>" + stability + "relationship with <span class = 'individual_justice'>" + data[otherIndex].name + "</span></li>";
+
+      listElement.stable = d.stable;
+      listElement.sindex = d.sindex;
+      listElement.tindex = d.tindex;
+      listElement.listString = tempString;
+
+      listElements.push(listElement);    
     }
+
   })
-  
-  constructedString += "</ul>"
-  $('#explanation_text').append(constructedString);
+
+  d3.select('.justice_listing')
+    .selectAll('li.justiceListing')
+    .data(listElements)
+   .enter().append('li')
+    .attr('class', function(d,i) {
+      var totalClass = 'justiceListing ';
+      if (d.stable == 1) {
+        totalClass += 'stable';
+      } else if (d.stable == 2) {
+        totalClass += 'unstable_p';
+      } else {
+        totalClass += 'unstable_n';
+      }
+      return totalClass;
+    })
+    .html(function(d,i) {
+      return d.listString;
+    })
+    .on('mouseover', function(cd,ci) {
+      triadPaths
+        .transition()
+        .duration(300)
+        .style('opacity', function(d,i) {
+          if ( (cd.sindex == d.sindex && cd.tindex == d.tindex) ||
+               (cd.tindex == d.sindex && cd.sindex == d.tindex) ) {
+            return 1.0;
+          } else {
+            return 0.0;
+          }
+        })
+
+    })
+    .on('mouseout', function() {
+      triadPaths
+        .transition()
+        .duration(300)
+        .style('opacity', 0.03)
+    });  
 }
 
 function
@@ -380,16 +439,23 @@ triadPathsCalculate(triadPaths, justiceGrouping)
         .style('opacity', function(d,i) {
           return (i == ci) ? 1.0 : 0.0;
         });
+
+      console.log('monkeysldkfj')
+      justiceCircles
+        .style('opacity', function(d,i) {
+          if (cd.sindex != i && cd.tindex != i) {
+            return 0.2;
+          } else {
+            return 1.0;
+          } 
+        })
     
       updatePathText(cd);
-      $('#explanation_text')  
     })
     .on('mouseout', function() {
-      opaquePathText();
+      // Figure out a way to make the chief noticeable
       justiceCircles
-        .attr('fill', function(d,i) {
-          return (d.chief == 1) ? 'steelblue' : custom_color(i);
-        })
+        .style('opacity', 1.0)
 
       triadPaths
         .transition()
