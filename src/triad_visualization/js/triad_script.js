@@ -188,7 +188,7 @@ drawTriadPaths(svg, paths)
       if (d.stable[0] == 0) {
         return 'white';
       } else if (d.stable[1] == 0) {
-        return 'turquoise'; 
+        return 'turquoise';
       } else {
         return 'red';
       }
@@ -199,19 +199,18 @@ drawTriadPaths(svg, paths)
 function
 constructNodeArrow(svg, consideration, current) 
 {
+  var indDist = (h - 2 * marginTop) / data.length;
+  var consideration_dev = marginTop + circleRadius + indDist * consideration;
+  var current_dev = marginTop + circleRadius + indDist * current;
 
-   var indDist = (h - 2 * marginTop) / data.length;
-   var consideration_dev = marginTop + circleRadius + indDist * consideration;
-   var current_dev = marginTop + circleRadius + indDist * current;
+  var dx = 0, dy = consideration_dev - current_dev,
+      dr = Math.sqrt(dx * dx + dy * dy);
 
-   var dx = 0, dy = consideration_dev - current_dev,
-       dr = Math.sqrt(dx * dx + dy * dy);
+  dr = (consideration_dev < current_dev) ? dr * -1 : dr;
 
-   dr = (consideration_dev < current_dev) ? dr * -1 : dr;
+  var pathQuery = "M " + marginLeft + " , " + consideration_dev +  " A " + dr + " , " + dr + " 0 0,1 " + marginLeft + "," + current_dev;
 
-   var pathQuery = "M " + marginLeft + " , " + consideration_dev +  " A " + dr + " , " + dr + " 0 0,1 " + marginLeft + "," + current_dev;
-
-   return pathQuery;
+  return pathQuery;
 }
 
 function 
