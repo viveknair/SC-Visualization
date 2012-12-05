@@ -1,14 +1,22 @@
 body {
   font-family: Helvetica;
+  color:#777;
+  padding-left:2%;
+}
+
+h1,h2,h3,h4,h5,h6,div{
+  font-weight:300;
+  margin-bottom:0;
 }
 
 #chart {
   position: relative;
   width: 600px;
+  font: 13px sans-serif;
 }
 
 #explanation {
-  width: 300px;
+  width: 500px;
   position: relative;
   right: 300px;
   float: right;
@@ -18,4 +26,28 @@ text.shadow {
   stroke: #fff;
   stroke-width: 3px;
   stroke-opacity: .6;
+}
+
+.individual_justice {
+  color: #4682b4;
+}
+
+.motif_header {
+  color: #4682b4;
+}
+
+.stability_result {
+  font-size: 20px; 
+}
+
+.stable {
+  color: 'green';
+}
+
+.unstable_p {
+  color: '#000';
+}
+
+.unstable_n {
+  color: '#CC1133';
 }

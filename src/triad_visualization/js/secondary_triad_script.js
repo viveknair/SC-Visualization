@@ -40,6 +40,22 @@ var data = [
   { chief: 0, leaning: 1, direction: 2, name: "WODouglas" }
 ]
 
+var color_options = [
+  '#1f77b4', '#aec7e8', '#ff7f0e', 
+  '#ffbb78', '#2ca02c', '#98df8a', 
+  '#d62728', '#ff9896', '#9467bd',     
+  '#c5b0d5', '#c49c94', '#e377c2', 
+  '#f7b6d2', '#7f7f7f', '#c7c7c7', 
+  '#17becf', '#9edae5'
+]
+color_options = color_options.reverse()
+function justiceNameMapper(datum) { return datum.name }
+var justiceNames = data.map( justiceNameMapper );
+
+var custom_color = d3.scale.ordinal()
+  .domain(justiceNames)
+  .range(color_options)
+
 var justiceCircles;
 
 var caseX = w / 2;
@@ -159,12 +175,43 @@ initializeTriadViz(caseName)
     .append('svg:circle')
     .attr({
       r: circleRadius,
-      fill: 'black',
+      fill: custom_color(i),
       class: 'caseCircle',
       transform: function(d,i) {
         return 'translate(' + d.x + ',' + d.y + ')';
       }
     })
+
+  var caseShadowText = justiceGrouping
+    .selectAll('text.caseShadowText')
+    .data(considerationCase)
+   .enter()
+    .append('svg:text')
+    .attr({
+      class: 'caseShadowText shadow',
+      transform: function(d,i) {
+        return 'translate(' + d.x + ',' + d.y + ')';
+      }
+    })
+    .text(function(d,i) { 
+      return d.caseName; 
+    });
+
+  var caseText = justiceGrouping
+    .selectAll('text.caseText')
+    .data(considerationCase)
+   .enter()
+    .append('svg:text')
+    .attr({
+      fill: 'black',
+      class: 'caseText',
+      transform: function(d,i) {
+        return 'translate(' + d.x + ',' + d.y + ')';
+      }
+    })
+    .text(function(d,i) { 
+      return d.caseName; 
+    });
 
   justiceCircles = justiceGrouping
     .selectAll('circle.justiceCircle')
@@ -174,7 +221,7 @@ initializeTriadViz(caseName)
     .attr({
       r: circleRadius,
       fill: function(d,i) {
-        return (d.chief == 1) ? 'steelblue' : '#AAA';
+        return (d.chief == 1) ? 'steelblue' : custom_color(i);
       },
       class: 'justiceCircle',
       id: function(d,i) {
@@ -195,8 +242,12 @@ initializeTriadViz(caseName)
         });
     })
     .on('mouseout', function(cd,ci) {
-       triadPaths.style('opacity', 1.0);
-     });
+      triadPaths
+        .transition()
+        .duration(300)
+        .style('opacity', 0.03);
+
+    });
 
   var justiceTexts = justiceGrouping
     .selectAll('text.shadowJusticeName')
@@ -234,9 +285,21 @@ initializeTriadViz(caseName)
 }
 
 function
-clearPathText() 
+opaquePathText() 
 {
-  $('#explanation_text').html("");
+  d3.select('#explanation_text').style('opacity', 0.2);
+}
+
+function
+brightPathText()
+{
+  d3.select('#explanation_text').style('opacity', 1.0);
+}
+
+
+function clearPathText()
+{
+  $('#explanation_text').html('');
 }
 
 function 
@@ -245,15 +308,15 @@ updatePathText(triadRelation)
   var firstJusticeName = data[triadRelation.sindex].name;
   var secondJusticeName = data[triadRelation.tindex].name;
   
-  var constructedString = "<p> Justice " + firstJusticeName + " and Justice " + secondJusticeName + " have a "; 
+  var constructedString = "<h3> <span class = 'individual_justice' > Justice " + firstJusticeName + "</span> and <span class = 'individual_justice'> Justice " + secondJusticeName + "</span> have a(n): </h3> <h1 class = 'stability_result'>"; 
   if (triadRelation.stable == 1) {
-    constructedString += "stable"
+    constructedString += "<span class = 'stable'>stable</span>"
   } else if (triadRelation.stable == 2) {
-    constructedString += "unstable (positive)"
+    constructedString += "<span class = 'unstable_p'>unstable (positive)</span>"
   } else {
-    constructedString += "unstable (negative)"
+    constructedString += "<span class = 'unstable_n'>unstable (negative)</span>"
   }
-  constructedString += " relationship</p>"
+  constructedString += " relationship</h1>"
 
   $('#explanation_text').append(constructedString);
 }
@@ -268,25 +331,27 @@ triadPathsCalculate(triadPaths, justiceGrouping)
       id: function(d,i) {
         return 'triadPath-' + i;
       },
-      opacity: 0.2,
+      opacity: 0.03,
       stroke: 'black',
       d: function(d,i) {
         return d.path;
       } 
     })
     .on('mouseover', function(cd,ci) {
+      brightPathText();
+      clearPathText();
       triadPaths
         .transition()
         .duration(300)
         .style('opacity', function(d,i) {
-          return (i == ci) ? 1.0 : 0.05;
+          return (i == ci) ? 1.0 : 0.0;
         });
     
       justiceCircles
         .attr('fill', function(d,i) {
-          var resultingColor = (i != cd.sindex && i != cd.tindex) ? '#AAA' : 'black';
-          if (resultingColor != 'black') {
-            resultingColor = (d.chief == 1) ? 'steelblue' : '#AAA';
+          var resultingColor = (i != cd.sindex && i != cd.tindex) ? '#AAA' : custom_color(i);
+          if (resultingColor != custom_color(i)) {
+            resultingColor = (d.chief == 1) ? 'steelblue' : custom_color(i);
           }
 
           return resultingColor;
@@ -296,17 +361,16 @@ triadPathsCalculate(triadPaths, justiceGrouping)
       $('#explanation_text')  
     })
     .on('mouseout', function() {
-
+      opaquePathText();
       justiceCircles
         .attr('fill', function(d,i) {
-          return (d.chief == 1) ? 'steelblue' : 'black';
+          return (d.chief == 1) ? 'steelblue' : custom_color(i);
         })
 
-      clearPathText();
       triadPaths
         .transition()
         .duration(300)
-        .style('opacity', 0.2);
+        .style('opacity', 0.03);
     })
 }
 
