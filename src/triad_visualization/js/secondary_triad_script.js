@@ -15,7 +15,7 @@
 //  -> leaning is either 0 or 1 (conservative or liberal)
 //  -> vote is either 0 or 1 (conservative or liberal)
 
-var w = 1000
+var w = 600
 var h = 550;
 var containerWidth = w - 200;
 var containerHeight = h - 200;
@@ -40,9 +40,11 @@ var data = [
   { chief: 0, leaning: 1, direction: 2, name: "WODouglas" }
 ]
 
+var justiceCircles;
+
 var caseX = w / 2;
 var caseY = h / 2 - circleRadius;
-var considerationCase = [ { x: caseBuffer, y: 0} ]
+var considerationCase = [ { caseName: "WADE v. HUNTER, WARDEN",  x: caseBuffer, y: 0} ]
 
 //======> End Test Data 
 
@@ -64,7 +66,21 @@ constructTriadData(data)
         triadRelation.stable = 3;
       }   
       
-      triadRelation.path =  'M ' + data[i].x + ' ' + data[i].y + ' L ' + data[j].x + ' ' + data[j].y + ' L ' + considerationCase[0].x + ' ' + considerationCase[0].y + ' z';
+      var dxi = data[i].x - data[j].x;
+      var dyi = data[i].y - data[j].y;
+      var dri = Math.sqrt( dxi * dxi + dyi * dyi );
+
+      var dxj = data[j].x - considerationCase[0].x;
+      var dyj = data[j].y - considerationCase[0].y;
+      var drj = Math.sqrt( dxj * dxj + dyj * dyj );
+
+      var dxz = data[i].x - considerationCase[0].x;
+      var dyz = data[i].y - considerationCase[0].y;
+      var drz = Math.sqrt( dxz * dxz + dyz * dyz );
+
+       // triadRelation.path =  'M ' + data[i].x + ' ' + data[i].y + ' A ' + dri + ' , ' + dri + " 0 0,0 " + data[j].x + ' , ' + data[j].y + ' A ' + drj + ' , ' + drj + " 1 0,0 " + considerationCase[0].x + ' , ' + considerationCase[0].y + ' z '; 
+
+      triadRelation.path =  'M ' + data[i].x + ' ' + data[i].y + ' A ' + dri + ' , ' + dri + " 0 0,0 " + data[j].x + ' , ' + data[j].y + ' A ' + drj + ' , ' + drj + " 1 0,0 " + considerationCase[0].x + ' , ' + considerationCase[0].y + ' z '; 
 
       triadResultData.push( triadRelation );
     }
@@ -150,14 +166,15 @@ initializeTriadViz(caseName)
       }
     })
 
-  var justiceCircles = justiceGrouping
+  justiceCircles = justiceGrouping
     .selectAll('circle.justiceCircle')
     .data(data)
-   .enter().append('svg:circle')
+
+  justiceCircles.enter().append('svg:circle')
     .attr({
       r: circleRadius,
       fill: function(d,i) {
-        return (d.chief == 1) ? 'steelblue' : 'black';
+        return (d.chief == 1) ? 'steelblue' : '#AAA';
       },
       class: 'justiceCircle',
       id: function(d,i) {
@@ -174,18 +191,14 @@ initializeTriadViz(caseName)
     .on('mouseover', function(cd,ci) {
       triadPaths  
         .style('opacity', function(d,i) {
-          if (d.tindex == ci || d.sindex == ci) {
-            return 1.0;
-          } else {
-            return 0; 
-          }
+          return (d.tindex == ci || d.sindex == ci) ? 1.0 : 0.0; 
         });
     })
     .on('mouseout', function(cd,ci) {
        triadPaths.style('opacity', 1.0);
      });
 
-  var justiceCircles = justiceGrouping
+  var justiceTexts = justiceGrouping
     .selectAll('text.shadowJusticeName')
     .data(data)
    .enter().append('svg:text')
@@ -201,7 +214,7 @@ initializeTriadViz(caseName)
     })
     .text(function(d,i) { return d.name  })
 
-  var justiceCircles = justiceGrouping
+  var justiceShadowTexts = justiceGrouping
     .selectAll('text.primaryJusticeName')
     .data(data)
    .enter().append('svg:text')
@@ -221,6 +234,31 @@ initializeTriadViz(caseName)
 }
 
 function
+clearPathText() 
+{
+  $('#explanation_text').html("");
+}
+
+function 
+updatePathText(triadRelation) 
+{
+  var firstJusticeName = data[triadRelation.sindex].name;
+  var secondJusticeName = data[triadRelation.tindex].name;
+  
+  var constructedString = "<p> Justice " + firstJusticeName + " and Justice " + secondJusticeName + " have a "; 
+  if (triadRelation.stable == 1) {
+    constructedString += "stable"
+  } else if (triadRelation.stable == 2) {
+    constructedString += "unstable (positive)"
+  } else {
+    constructedString += "unstable (negative)"
+  }
+  constructedString += " relationship</p>"
+
+  $('#explanation_text').append(constructedString);
+}
+
+function
 triadPathsCalculate(triadPaths, justiceGrouping)
 {
   triadPaths.enter().append('svg:path')
@@ -230,43 +268,46 @@ triadPathsCalculate(triadPaths, justiceGrouping)
       id: function(d,i) {
         return 'triadPath-' + i;
       },
+      opacity: 0.2,
       stroke: 'black',
       d: function(d,i) {
         return d.path;
       } 
     })
     .on('mouseover', function(cd,ci) {
-      justiceGrouping
-        .selectAll('path.triadPath')
-        .each( function() {
-          var current = d3.select(this);
-          if (current.attr('id') != 'triadPath-' + ci) {
-            current.style('opacity', 0.05);
+      triadPaths
+        .transition()
+        .duration(300)
+        .style('opacity', function(d,i) {
+          return (i == ci) ? 1.0 : 0.05;
+        });
+    
+      justiceCircles
+        .attr('fill', function(d,i) {
+          var resultingColor = (i != cd.sindex && i != cd.tindex) ? '#AAA' : 'black';
+          if (resultingColor != 'black') {
+            resultingColor = (d.chief == 1) ? 'steelblue' : '#AAA';
           }
-        })
+
+          return resultingColor;
+        });
+
+      updatePathText(cd);
+      $('#explanation_text')  
     })
-    .on('mouseout', function(cd,ci) {
-      justiceGrouping
-        .selectAll('path.triadPath')
-        .each( function() {
-          var current = d3.select(this);
-          current.style('opacity', 1.0);
-         })
-    })
-    .on('click', function(cd,ci) {
-       var mainElement = d3.select(this);
-  
-       justiceGrouping
-        .selectAll('path.triadPath')
-        .each(function() {
-          var currentElement = d3.select(this);
-          if ( currentElement.attr('fill') == mainElement.attr('fill') ) {
-            currentElement.style('opacity', 1.0);
-          } else {
-            currentElement.style('opacity', 0.05);
-          }
+    .on('mouseout', function() {
+
+      justiceCircles
+        .attr('fill', function(d,i) {
+          return (d.chief == 1) ? 'steelblue' : 'black';
         })
-     })
+
+      clearPathText();
+      triadPaths
+        .transition()
+        .duration(300)
+        .style('opacity', 0.2);
+    })
 }
 
 $(document).ready(initializeTriadViz("test"));

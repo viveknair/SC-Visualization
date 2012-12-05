@@ -2,6 +2,18 @@ body {
   font-family: Helvetica;
 }
 
+#chart {
+  position: relative;
+  width: 600px;
+}
+
+#explanation {
+  width: 300px;
+  position: relative;
+  right: 300px;
+  float: right;
+}
+
 text.shadow {
   stroke: #fff;
   stroke-width: 3px;
