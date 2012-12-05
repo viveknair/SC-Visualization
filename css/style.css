@@ -1,5 +1,4 @@
 /* 
-
 Red: #DA0B2E
 Blue #1782CF
 */
@@ -20,11 +19,11 @@ Blue #1782CF
 }
 
 line.y{
-	stroke:#ccc;
+	stroke:#ddd;
 }
 
 line.x{
-	stroke:#ccc;
+	stroke:#ddd;
 }
 
 .gradient{
@@ -44,27 +43,27 @@ line.x{
 }
 .cases:hover{
 	opacity: 1;
-	transition: opacity 1s;
-	-moz-transition:opacity 1s;
-	-webkit-transition:opacity 1s;
-	-o-transition:opacity 1s;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
 }
 .liberal{
 	fill:#1782CF;
 	opacity: .7;
-	transition: opacity 1s;
-	-moz-transition:opacity 1s;
-	-webkit-transition:opacity 1s;
-	-o-transition:opacity 1s;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
 }
 
 .conservative{
 	fill:#DA0B2E;
 	opacity: .7;
-	transition: opacity 1s;
-	-moz-transition:opacity 1s;
-	-webkit-transition:opacity 1s;
-	-o-transition:opacity 1s;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
 }
 
 #chart{
@@ -78,4 +77,22 @@ line.x{
 
 .top{
 	top:0;
+}
+
+.decadeSelector{
+	cursor:pointer;
+	opacity:.05;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
+}
+
+.decadeSelector:hover{
+	cursor:pointer;
+	opacity: 0;
+	transition: opacity .5s;
+	-moz-transition:opacity .5s;
+	-webkit-transition:opacity .5s;
+	-o-transition:opacity .5s;
 }
