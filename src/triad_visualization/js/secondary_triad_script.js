@@ -40,6 +40,9 @@ var data = [
   { chief: 0, leaning: 1, direction: 2, name: "WODouglas" }
 ]
 
+//======> End Test Data 
+
+// Custom sexy colors that were hand-picked (just like Italian grapes!)
 var color_options = [
   '#1f77b4', '#aec7e8', '#ff7f0e', 
   '#ffbb78', '#2ca02c', '#98df8a', 
@@ -48,6 +51,7 @@ var color_options = [
   '#f7b6d2', '#7f7f7f', '#c7c7c7', 
   '#17becf', '#9edae5'
 ]
+
 color_options = color_options.reverse()
 function justiceNameMapper(datum) { return datum.name }
 var justiceNames = data.map( justiceNameMapper );
@@ -62,7 +66,29 @@ var caseX = w / 2;
 var caseY = h / 2 - circleRadius;
 var considerationCase = [ { caseName: "WADE v. HUNTER, WARDEN",  x: caseBuffer, y: 0} ]
 
-//======> End Test Data 
+function
+isUpperCase(char) 
+{
+  return char == char.toUpperCase();
+}
+
+function
+constructAppropriateName(raw_data) 
+{
+  for( var i = 0; i < data.length; i ++) {
+    var constructedString = "";
+    var dataStringLength = data[i].name.length;
+    for( var j = 0; j < dataStringLength; j ++) {
+      var currentChar = data[i].name.charAt(j);
+      var nextChar = data[i].name.charAt(j + 1);
+      constructedString += currentChar;
+      if ( isUpperCase(currentChar) && isUpperCase(nextChar) ) {
+        constructedString += '. '; 
+      }
+    }
+    data[i].name = constructedString;
+  } 
+}
 
 function
 constructTriadData(data) 
@@ -133,6 +159,7 @@ stabilityColor(d) {
 function
 initializeTriadViz(caseName) 
 {
+  constructAppropriateName(data);
 
   var svg = d3.select("#chart")
     .append("svg:svg")
@@ -186,16 +213,17 @@ initializeTriadViz(caseName)
   var caseShadowText = justiceGrouping
     .selectAll('text.caseShadowText')
     .data(considerationCase)
-   .enter()
-    .append('svg:text')
+   .enter().append('svg:text')
+    .text(function(d,i) { 
+      return d.caseName; 
+    })
     .attr({
       class: 'caseShadowText shadow',
       transform: function(d,i) {
-        return 'translate(' + d.x + ',' + d.y + ')';
+        var text = d3.select(this).node();
+        var boundingBox = text.getBBox();
+        return 'translate(' + (d.x - boundingBox.width) + ',' + d.y + ')';
       }
-    })
-    .text(function(d,i) { 
-      return d.caseName; 
     });
 
   var caseText = justiceGrouping
@@ -203,15 +231,17 @@ initializeTriadViz(caseName)
     .data(considerationCase)
    .enter()
     .append('svg:text')
+    .text(function(d,i) { 
+      return d.caseName; 
+    })
     .attr({
       fill: 'black',
       class: 'caseText',
       transform: function(d,i) {
-        return 'translate(' + d.x + ',' + d.y + ')';
+        var text = d3.select(this).node();
+        var boundingBox = text.getBBox();
+        return 'translate(' + (d.x - boundingBox.width) + ',' + d.y + ')';
       }
-    })
-    .text(function(d,i) { 
-      return d.caseName; 
     });
 
   justiceCircles = justiceGrouping
@@ -328,8 +358,10 @@ updatePathText(triadRelation)
 {
   var firstJusticeName = data[triadRelation.sindex].name;
   var secondJusticeName = data[triadRelation.tindex].name;
-  
-  var constructedString = "<h3> <span class = 'individual_justice' > Justice " + firstJusticeName + "</span> and <span class = 'individual_justice'> Justice " + secondJusticeName + "</span> have a(n): </h3> <h1 class = 'stability_result'>"; 
+
+  var leaningClassFirst = (data[triadRelation.sindex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+  var leaningClassSecond = (data[triadRelation.sindex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+  var constructedString = "<h3> <span class = '" + leaningClassFirst  + "' > Justice " + firstJusticeName + "</span> and <span class = '" + leaningClassSecond + "'> Justice " + secondJusticeName + "</span> have a(n): </h3> <h1 class = 'stability_result'>"; 
   if (triadRelation.stable == 1) {
     constructedString += "<span class = 'stable'>stable</span>"
   } else if (triadRelation.stable == 2) {
@@ -345,7 +377,8 @@ updatePathText(triadRelation)
 function
 updateBatchPathText(triadPaths, ci)
 {
-  var constructedString = "<h3> <span class = 'individual_justice' > Justice " + data[ci].name + " has a(n): </h3><ul class = 'justice_listing'></ul>" ; 
+  var leaningClassFirst = (data[ci].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+  var constructedString = "<h3> <span class = '" + leaningClassFirst  +  "' > Justice " + data[ci].name + " has a(n): </h3><ul class = 'justice_listing'></ul>" ; 
   $('#explanation_text').append(constructedString);
   var listElements = [];
   triadPaths.each(function(d,i) {
@@ -362,7 +395,9 @@ updateBatchPathText(triadPaths, ci)
       } else if (d.stable == 3) {
         stability = "unstable (negative) ";
       }
-      var tempString = "<li>" + stability + "relationship with <span class = 'individual_justice'>" + data[otherIndex].name + "</span></li>";
+
+      var otherIndexClass = (data[otherIndex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+      var tempString = "<li>" + stability + "relationship with <span class = '" + otherIndexClass + "'>" + data[otherIndex].name + "</span></li>";
 
       listElement.stable = d.stable;
       listElement.sindex = d.sindex;

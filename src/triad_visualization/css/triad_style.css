@@ -40,8 +40,12 @@ text.shadow {
   stroke-opacity: .6;
 }
 
-.individual_justice {
+.blue_individual_justice {
   color: #4682b4;
+}
+
+.red_individual_justice {
+  color: #CC1133;
 }
 
 .motif_header {
