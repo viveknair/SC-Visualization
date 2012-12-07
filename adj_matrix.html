@@ -12,7 +12,7 @@
        More info: h5bp.com/i/378 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>CS448 Final Project</title>
+  <title>ADJACENCY MATRIX</title>
   <meta name="description" content="">
 
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
@@ -20,24 +20,49 @@
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/adj_matrix.css">
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
   <!-- All JavaScript at the bottom, except this Modernizr build.
        Modernizr enables HTML5 elements & feature detects for optimal performance.
        Create your own custom Modernizr build: www.modernizr.com/download/ -->
+
+  <style>
+    .background {
+      fill: #eee;
+    }
+
+    line {
+      stroke: #fff;
+    }
+
+    text.active {
+      fill: red;
+    }
+  </style>
+
+
   <script src="http://d3js.org/d3.v2.js"></script>
 </head>
 <body>
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
        chromium.org/developers/how-tos/chrome-frame-getting-started -->
   <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-  <h1> CS448B Final Project </h1>
+  <h1>ADJACENCY MATRIX</h1>
+
+  <aside style="margin-top:80px;">
+    <p>Court Descisions For The: <select id="order">
+      <option value="name">1970's</option>
+      <option value="count">1980's</option>
+      <option value="group">1990's</option>
+    </select>
+  </aside>
+
   <div id="chart" role="main">
   </div>
   <!-- scripts concatenated and minified via build script -->
-  <script src="js/script.js"></script>
+  <script src="js/adj_matrix.js"></script>
   <!-- end scripts -->
 
 </body>
