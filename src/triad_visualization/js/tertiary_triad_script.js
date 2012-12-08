@@ -167,31 +167,34 @@ setCaseName(considerationCase)
   }
 }
 
+// Start visualization =======>
+
+var svg = d3.select("#chart")
+  .append("svg:svg")
+  .attr('width', w)
+  .attr('height', h);
+
+var justiceGrouping = svg.append('svg:g')
+  .attr('class', 'justiceGrouping')
+  .attr('transform', function() {
+    return 'translate(' + (w / 2) + ',' + (h / 2) + ')';
+  });
+
+var justiceArc = justiceGrouping
+  .append('svg:path')
+  .attr('d', arc)
+  .style('stroke', 'black'); 
+
+var justiceArcEl = justiceArc.node();
+var justiceArcLength = justiceArcEl.getTotalLength();
+
+// End visualization =======>
+
 function
 initializeTriadViz() 
 {
   setCaseName(considerationCase);
     
-  d3.select("#chart").html("");
-
-  var svg = d3.select("#chart")
-    .append("svg:svg")
-    .attr('width', w)
-    .attr('height', h);
-
-  var justiceGrouping = svg.append('svg:g')
-    .attr('class', 'justiceGrouping')
-    .attr('transform', function() {
-      return 'translate(' + (w / 2) + ',' + (h / 2) + ')';
-    });
-
-  var justiceArc = justiceGrouping
-    .append('svg:path')
-    .attr('d', arc)
-    .style('stroke', 'black'); 
-
-  var justiceArcEl = justiceArc.node();
-  var justiceArcLength = justiceArcEl.getTotalLength();
   var pixelDivision = justiceArcLength / (data.length - 1);
 
   for (var i = 0; i < data.length; i ++) {
@@ -207,11 +210,18 @@ initializeTriadViz()
 
   triadPathsCalculate(triadPaths, justiceGrouping);
 
-  justiceCircles = justiceGrouping
-    .selectAll('circle.justiceCircle')
+  justiceShadowCircles = justiceGrouping
+    .selectAll('circle.white_justiceCircle')
     .data(data)
 
-  justiceCircles.enter().append('svg:circle')
+  justiceShadowCircles.attr({
+    transform: function(d,i) {
+      // Setting the data location
+      return 'translate(' + (d.x) + ',' + (d.y) + ')';
+    }
+  })
+
+  justiceShadowCircles.enter().append('svg:circle')
     .attr({
       r: circleRadius,
       fill: 'white',
@@ -224,6 +234,28 @@ initializeTriadViz()
         return 'translate(' + (d.x) + ',' + (d.y) + ')';
       }
     })
+
+  // Deleting old nodes
+  var exitShadowCircles = justiceShadowCircles.exit()
+    .transition()
+    .duration(300)
+    .style({
+      opacity: 0.0
+    });
+
+  exitShadowCircles.remove();
+
+  justiceCircles = justiceGrouping
+    .selectAll('circle.justiceCircle')
+    .data(data)
+
+  // Updating the existing circles
+  justiceCircles.attr({
+    transform: function(d,i) {
+      // Setting the data location
+      return 'translate(' + (d.x) + ',' + (d.y) + ')';
+    }
+  })
 
   justiceCircles.enter().append('svg:circle')
     .attr({
@@ -263,9 +295,23 @@ initializeTriadViz()
 
     });
 
+  // Deleting old nodes
+  var exitCircles = justiceCircles.exit()
+    .transition()
+    .duration(300)
+    .style({ opacity: 0.0 })
+
+  exitCircles.remove()
+
+
   var justiceTexts = justiceGrouping
     .selectAll('text.shadowJusticeName')
     .data(data)
+
+  justiceTexts
+    .text(function(d) { return d.name;  });
+
+  justiceTexts
    .enter().append('svg:text')
     .attr({
       class: 'shadowJusticeName shadow',
@@ -279,9 +325,16 @@ initializeTriadViz()
     })
     .text(function(d,i) { return d.name  })
 
+  justiceTexts.exit().remove();
+
   var justiceShadowTexts = justiceGrouping
     .selectAll('text.primaryJusticeName')
     .data(data)
+
+  justiceShadowTexts
+    .text(function(d) { return d.name;  });
+
+  justiceShadowTexts
    .enter().append('svg:text')
     .attr({
       fill: '#232323',
@@ -295,6 +348,8 @@ initializeTriadViz()
       }
     })
     .text(function(d,i) { return d.name  })
+
+  justiceShadowTexts.exit().remove();
 
 }
 
@@ -436,8 +491,9 @@ searchAnimation()
   $('#submit').click(function(e) {
     e.preventDefault();
     var searchTerm = searchTermField.val(); 
+    $('#explanation_text').html("");
 
-    $.getJSON("data/" + searchTerm + ".json", parseTermJson);
+    d3.json("data/" + searchTerm + ".json", parseTermJson);
   });
 }
 
@@ -446,6 +502,8 @@ parseTermJson(json)
 {
   data = []; 
  
+  console.log(json);
+
   considerationCase = { caseName: json[0].caseName  }; 
   if (json.length > 0) {
     for (var k = 0; k < json.length; k ++) {
@@ -471,6 +529,16 @@ parseTermJson(json)
 function
 triadPathsCalculate(triadPaths, justiceGrouping)
 {
+  triadPaths
+    .style({
+      stroke: function(d,i) { return stabilityColor(d); },
+    })
+    .transition()
+   .duration(300)
+    .attr({
+      d: function(d,i) { return d.path; } 
+    })
+ 
   triadPaths.enter().append('svg:path')
     .attr({
       fill: 'none',

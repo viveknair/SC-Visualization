@@ -9,6 +9,10 @@ h1,h2,h3,h4,h5,h6,div{
   margin-bottom:0;
 }
 
+#case_main_header {
+  width: 800px;
+}
+
 li.stable {
   color: 'green';
 }
