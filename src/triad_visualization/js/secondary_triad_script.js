@@ -397,7 +397,11 @@ updateBatchPathText(triadPaths, ci)
       }
 
       var otherIndexClass = (data[otherIndex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
-      var tempString = "<li>" + stability + "relationship with <span class = '" + otherIndexClass + "'>" + data[otherIndex].name + "</span></li>";
+      var tempString = "<li>" 
+                          + stability + "relationship with <span class = '" 
+                          + otherIndexClass + "'>" + data[otherIndex].name 
+                          + "</span>" 
+                        + "</li>";
 
       listElement.stable = d.stable;
       listElement.sindex = d.sindex;
@@ -456,14 +460,10 @@ triadPathsCalculate(triadPaths, justiceGrouping)
     .attr({
       fill: function(d,i) { return stabilityColor(d); },
       class: 'triadPath',
-      id: function(d,i) {
-        return 'triadPath-' + i;
-      },
+      id: function(d,i) { return 'triadPath-' + i; },
       opacity: 0.03,
       stroke: 'black',
-      d: function(d,i) {
-        return d.path;
-      } 
+      d: function(d,i) { return d.path; } 
     })
     .on('mouseover', function(cd,ci) {
       brightPathText();
@@ -475,14 +475,9 @@ triadPathsCalculate(triadPaths, justiceGrouping)
           return (i == ci) ? 1.0 : 0.0;
         });
 
-      console.log('monkeysldkfj')
       justiceCircles
         .style('opacity', function(d,i) {
-          if (cd.sindex != i && cd.tindex != i) {
-            return 0.2;
-          } else {
-            return 1.0;
-          } 
+          return (cd.sindex != i && cd.tindex != i) ? 0.2 : 1.0;
         })
     
       updatePathText(cd);
