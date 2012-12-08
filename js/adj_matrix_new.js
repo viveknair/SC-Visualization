@@ -1,4 +1,4 @@
-var margin = {top: 80, right: 0, bottom: 10, left: 100},
+var margin = {top: 0, right: 0, bottom: 10, left: 100},
     width = 1000,
     height = 900;
 
@@ -188,5 +188,15 @@ d3.select("#order").on("change", function() {
   //order(this.value);
 });
 
-$(document).ready(redraw(parseInt($("#order").val())));
+$(document).ready(function() {
+
+  for (var i = 4; i < 12; i++){
+    var links = "<option value="+(1900+i*10)+">"+(1900+i*10)+"'s</option>";
+    $("#order").append(links);
+  }
+
+  $("#order").val(1970);
+
+  redraw(parseInt($("#order").val()));
+});
 
