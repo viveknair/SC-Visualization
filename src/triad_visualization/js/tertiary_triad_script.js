@@ -23,7 +23,6 @@ var startingYear = 1970;
 var marginLeft = 200;
 var marginRight = 100;
 var marginTop = 100;
-var caseBuffer = 250;
 var distanceJudges = 30;
 var circleRadius = 20;
 
@@ -65,7 +64,7 @@ var justiceCircles;
 
 var caseX = w / 2;
 var caseY = h / 2 - circleRadius;
-var considerationCase = [ { caseName: "WADE v. HUNTER, WARDEN",  x: caseBuffer, y: 0} ]
+var considerationCase = {}; // [ { caseName: "WADE v. HUNTER, WARDEN", y: 0} ]
 
 function
 isUpperCase(char) 
@@ -124,7 +123,9 @@ constructTriadData(data)
       
       var dri = calculateRDelta(data[i], data[j]);
 
-      triadRelation.path =  'M ' + data[i].x + ' ' + data[i].y + ' A ' + dri + ' , ' + dri + " 0 0,0 " + data[j].x + ' , ' + data[j].y;
+      triadRelation.path =  'M ' + data[i].x + ' ' + data[i].y + ' A ' 
+                          + dri + ' , ' + dri + " 0 0,0 " + data[j].x 
+                          + ' , ' + data[j].y;
       triadResultData.push( triadRelation );
     }
   }
@@ -159,9 +160,19 @@ stabilityColor(d) {
 }
 
 function
-initializeTriadViz(caseName) 
+setCaseName(considerationCase)
 {
-  constructAppropriateName(data);
+  if (considerationCase.caseName) {
+    $('#case_main_header').html(considerationCase.caseName);  
+  }
+}
+
+function
+initializeTriadViz() 
+{
+  setCaseName(considerationCase);
+    
+  d3.select("#chart").html("");
 
   var svg = d3.select("#chart")
     .append("svg:svg")
@@ -311,8 +322,8 @@ updatePathText(triadRelation)
   var firstJusticeName = data[triadRelation.sindex].name;
   var secondJusticeName = data[triadRelation.tindex].name;
 
-  var leaningClassFirst = (data[triadRelation.sindex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
-  var leaningClassSecond = (data[triadRelation.sindex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+  var leaningClassFirst = (data[triadRelation.sindex].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
+  var leaningClassSecond = (data[triadRelation.tindex].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
   var constructedString = "<h3> <span class = '" + leaningClassFirst  + "' > Justice " + firstJusticeName + "</span> and <span class = '" + leaningClassSecond + "'> Justice " + secondJusticeName + "</span> have a(n): </h3> <h1 class = 'stability_result'>"; 
   if (triadRelation.stable == 1) {
     constructedString += "<span class = 'stable'>stable</span>"
@@ -329,7 +340,7 @@ updatePathText(triadRelation)
 function
 updateBatchPathText(triadPaths, ci)
 {
-  var leaningClassFirst = (data[ci].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+  var leaningClassFirst = (data[ci].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
   var constructedString = "<h3> <span class = '" + leaningClassFirst  +  "' > Justice " + data[ci].name + " has a(n): </h3><ul class = 'justice_listing'></ul>" ; 
   $('#explanation_text').append(constructedString);
   var listElements = [];
@@ -348,7 +359,7 @@ updateBatchPathText(triadPaths, ci)
         stability = "unstable (negative) ";
       }
 
-      var otherIndexClass = (data[otherIndex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+      var otherIndexClass = (data[otherIndex].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
       var tempString = "<li>" 
                           + stability + "relationship with <span class = '" 
                           + otherIndexClass + "'>" + data[otherIndex].name 
@@ -407,6 +418,57 @@ updateBatchPathText(triadPaths, ci)
 }
 
 function
+searchAnimation()
+{
+  var searchTermField = $('#searchTermField');
+  searchTermField.keyup(function() {
+    $("#x").fadeIn();
+    if ($.trim(searchTermField.val()) == "") {
+        $("#x").fadeOut();
+    }
+  });
+
+  $("#x").click(function() {
+    searchTermField.val("");
+    $(this).hide();
+  });
+
+  $('#submit').click(function(e) {
+    e.preventDefault();
+    var searchTerm = searchTermField.val(); 
+
+    $.getJSON("data/" + searchTerm + ".json", parseTermJson);
+  });
+}
+
+function
+parseTermJson(json)
+{
+  data = []; 
+ 
+  considerationCase = { caseName: json[0].caseName  }; 
+  if (json.length > 0) {
+    for (var k = 0; k < json.length; k ++) {
+      if (json[k].caseName != considerationCase.caseName )
+        break;
+
+      var formattedInformation = {};
+      formattedInformation.name = json[k].justiceName;
+      formattedInformation.direction = json[k].direction; 
+  
+      // Definitely will be changed
+      var random = Math.floor((Math.random() * 10) + 1);
+      formattedInformation.leaning = (random > 5) ? 1 : 2;
+      
+      data.push(formattedInformation); 
+    }
+  }
+  
+  constructAppropriateName(data);
+  initializeTriadViz();
+}
+
+function
 triadPathsCalculate(triadPaths, justiceGrouping)
 {
   triadPaths.enter().append('svg:path')
@@ -449,4 +511,7 @@ triadPathsCalculate(triadPaths, justiceGrouping)
     })
 }
 
-$(document).ready(initializeTriadViz("test"));
+$(document).ready(function() {
+    searchAnimation();
+    // initializeTriadViz();
+});
