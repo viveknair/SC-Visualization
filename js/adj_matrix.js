@@ -8,7 +8,7 @@ var containerWidth = width - 300,
 
 var x = d3.scale.ordinal().rangeBands([0, width]),
     z = d3.scale.linear().domain([0, 4]).clamp(true),
-    c = d3.scale.category10().domain(d3.range(10));
+    c = d3.scale.category10().domain(d3.range(100));
 
 var svg = d3.select("#chart").append("svg")
     .attr("width", width)
@@ -112,7 +112,8 @@ d3.json("miserables.json", function(miserables) {
   }
 
   d3.select("#order").on("change", function() {
-    clearTimeout(timeout);
+    alert("FUCK");
+    //clearTimeout(timeout);
     order(this.value);
   });
 
@@ -133,8 +134,8 @@ d3.json("miserables.json", function(miserables) {
         .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
   }
 
-  var timeout = setTimeout(function() {
+  /*var timeout = setTimeout(function() {
     order("group");
     d3.select("#order").property("selectedIndex", 2).node().focus();
-  }, 5000);
+  }, 5000);*/
 });
