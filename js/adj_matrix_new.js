@@ -1,6 +1,4 @@
-var decadeShowing = 1970;
-
-var margin = {top: 80, right: 0, bottom: 10, left: 80},
+var margin = {top: 80, right: 0, bottom: 10, left: 100},
     width = 1000,
     height = 900;
 
@@ -14,9 +12,20 @@ var x = d3.scale.ordinal().rangeBands([0, containerWidth]),
 
 var colorFunction = d3.scale.linear()
   .domain([0, 50, 100])
-  .range(["blue", "grey", "red"]);
+  .range(["blue", "#FFF", "red"]);
 
 var svg = d3.select("#chart").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+   .append("g")
+    .attr('width', containerWidth)
+    .attr('height', containerHeight)
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+function redraw(decadeShowing){
+  d3.select("#chart").select("svg").remove();
+
+  var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
    .append("g")
@@ -61,10 +70,10 @@ d3.json("justices.json", function(justices) {
 
 
 
-/*function justiceNameMapper(datum) { return datum.justiceName; }
-var justiceNames = justices.map( justiceNameMapper );
+  /*function justiceNameMapper(datum) { return datum.justiceName; }
+  var justiceNames = justices.map( justiceNameMapper );
 
-alert(justiceNames);*/
+  alert(justiceNames);*/
 
 
 
@@ -99,7 +108,7 @@ alert(justiceNames);*/
   svg.append("rect")
       .attr("class", "background")
       .attr("width", containerWidth)
-      .attr("height", 9*100-300);
+      .attr("height", containerHeight);
 
 
   var row = svg.selectAll(".row")
@@ -114,7 +123,7 @@ alert(justiceNames);*/
 
   row.append("text")
     .attr("x", -6)
-    .attr("y", x.rangeBand() / 2)
+    .attr("y", y.rangeBand() / 2)
     .attr("dy", ".32em")
     .attr("text-anchor", "end")
     .text(function(d, i) { return arrayOfJudgesNames[i]; });
@@ -125,13 +134,14 @@ alert(justiceNames);*/
       .data(d3.range(10))
     .enter().append("g")
       .attr("class", "column")
-      .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
+      .attr("transform", function(d, i) { return "translate(" + x(i) + ","+(containerHeight-20)+")"; });
 
   column.append("line")
+      .attr("transform", function(d, i) { return "translate(0,"+(-containerHeight)+")rotate(-90)"; })
       .attr("x1", -width);
 
   column.append("text")
-      .attr("x", 6)
+      .attr("x", x.rangeBand()/4)
       .attr("y", x.rangeBand() / 2)
       .attr("dy", ".32em")
       .attr("text-anchor", "start")
@@ -156,9 +166,9 @@ alert(justiceNames);*/
         .attr("class", "cell")
         .attr("x", function(d, i) { return x(i); })
         .attr("width", x.rangeBand())
-        .attr("height", x.rangeBand())
+        .attr("height", y.rangeBand())
         //.style("fill-opacity", function(d) { return z(d.z); })
-        .style("fill", function(d) { return d.justiceName ? colorFunction(d.liberalVotes / (d.liberalVotes+d.conservativeVotes) * 100) : "#EEEEEE"; })
+        .style("fill", function(d) { return d.justiceName ? colorFunction(d.liberalVotes / (d.liberalVotes+d.conservativeVotes) * 100) : "#FFF"; })
 
 
 
@@ -166,5 +176,17 @@ alert(justiceNames);*/
         //.on("mouseout", mouseout);
   }
 
+
+
 });
+
+}
+
+d3.select("#order").on("change", function() {
+  redraw(parseInt(this.value));
+  //clearTimeout(timeout);
+  //order(this.value);
+});
+
+$(document).ready(redraw(parseInt($("#order").val())));
 
