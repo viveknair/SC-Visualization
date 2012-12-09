@@ -162,29 +162,15 @@ d3.json("justices.json", function(justices) {
     row = newRow;
 
 
-    var flipper = function(justiceName, year, calcValue) {
+    var transition = function(justiceName, year, calcValue) {
       if (!justiceName || !year)
         return;
       return function() {
-        //alert("A");
         var sel = '#'+justiceName+year;
-        //alert(sel);
-        //if (side === 'back') {
-          //rotateY = 'rotateY(0deg)';  
-        //}
-        //if (browser.browser === 'Safari' || browser.browser === 'Chrome') {
-        //} else {
-        //  d3.select(sel).select('.' + oldSide).classed('hidden', true);
-        //d3.select(sel).select('.' + newSide).classed('hidden', false);
-        //alert("s");
         d3.select(sel).style("fill", calcValue);
-        //}
-          
       };
     };
 
-    //row = row.slice(1960,1960+10);
-    //alert(row[5].justiceName);
     var cell = d3.select(this).selectAll(".cell")
         .data(row)
       .enter().append("rect")
@@ -197,7 +183,7 @@ d3.json("justices.json", function(justices) {
         .style("fill", function(d) {
           if (d.justiceName){
             var calcValue = colorFunction(d.liberalVotes / (d.liberalVotes+d.conservativeVotes) * 100);
-            setTimeout(flipper(d.justiceName,d.year, calcValue), ((d.year-decadeShowing)*30+Math.random() * 50));
+            setTimeout(transition(d.justiceName,d.year,calcValue), ((d.year-decadeShowing)*30+Math.random() * 50));
           }
           return '#FFF'; 
         })
@@ -272,8 +258,12 @@ $(document).ready(function() {
     var links = "<option value="+(1900+i*10)+">"+(1900+i*10)+"'s</option>";
     $("#order").append(links);
   }
-
   $("#order").val(1970);
+
+  for (var i = 10; i >= 0; i--){
+    var block = "<li><span class='coloredBlock' style='background:"+colorFunction(i*10)+";'></span></li>";
+    $("#coloredBlocks").append(block);
+  }
 
   redraw(parseInt($("#order").val()));
 });
