@@ -14,6 +14,19 @@
 
 
 
+.background {
+  fill: #eee;
+}
+
+line {
+  stroke: #fff;
+}
+
+text.active {
+  fill: red;
+}
+
+
 #legend {
 	background: none repeat scroll 0 0 #F0F0F0;
   border: 1px solid #E0E0E0;
