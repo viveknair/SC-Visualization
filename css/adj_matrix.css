@@ -11,3 +11,61 @@
 	stroke-width: 2px;
 	shape-rendering: crispEdges;
 }
+
+
+
+.background {
+  fill: #eee;
+}
+
+line {
+  stroke: #fff;
+}
+
+text.active {
+  fill: red;
+}
+
+
+#legend {
+	background: none repeat scroll 0 0 #F0F0F0;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  /*clear: left;*/
+  color: #777777;
+  font-size: 11px;
+  line-height: 11px;
+  margin: 10px 24px;
+  overflow: hidden;
+  padding: 5px 7px;
+  width: 70px;
+  height: 450px;
+
+  position:absolute;
+  left:850px;
+  top:200px;
+}
+
+#legend .colors{
+clear: both; list-style-type: none; overflow: hidden; padding:0; font-size:18px;
+position:absolute;
+top:20px;
+right:10px;
+}
+#legend .colors>li{
+margin-bottom:-1px;
+}
+.coloredBlock{
+display:inline-block;width:35px; height:35px; background: none repeat scroll 0 0 #FF0000; clear:both;
+}
+
+
+#legend .labels{
+clear: both; list-style-type: none;padding:0; font-size:18px;
+position:absolute;
+top:30px;
+/*left:0px;*/
+}
+#legend .labels>li{
+height:34px;
+}

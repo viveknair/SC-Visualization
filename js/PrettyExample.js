@@ -1,3 +1,19 @@
+var browser = BrowserDetect;
+
+var buckets = 11,
+	colorScheme = 'rbow2',
+	days = [
+		{ name: 'Monday', abbr: 'Mo' },
+		{ name: 'Tuesday', abbr: 'Tu' },
+		{ name: 'Wednesday', abbr: 'We' },
+		{ name: 'Thursday', abbr: 'Th' },
+		{ name: 'Friday', abbr: 'Fr' },
+		{ name: 'Saturday', abbr: 'Sa' },
+		{ name: 'Sunday', abbr: 'Su' }
+	],
+	hours = ['12a', '1a', '2a', '3a', '4a', '5a', '6a', '7a', '8a', '9a', '10a', '11a', '12p', '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p', '9p', '10p', '11p'];
+
+
 /* ************************** */
 d3.json('tru247.json', function(json) {
 	
@@ -6,38 +22,6 @@ d3.json('tru247.json', function(json) {
 	createTiles();
 	reColorTiles('all', 'all');
 	
-	if (isOldBrowser() === false) {
-		drawMobilePie('all');
-	}
-		
-	/* ************************** */
-	
-	// State map click events
-	d3.selectAll('#map path.state').on('click', function() {
-		var $sel = d3.select('path.state.sel'),
-			prevState, currState;
-				
-		if ($sel.empty()) {
-			prevState = '';
-		} else {
-			prevState = $sel.attr('id');
-		}
-		
-		currState = d3.select(this).attr('id');
-		
-		if (prevState !== currState) {
-			var type = d3.select('#type label.sel span').attr('class');
-			reColorTiles(currState, type);
-			drawMobilePie(currState);
-		}
-		
-		d3.selectAll('#map path.state').classed('sel', false);
-		d3.select(this).classed('sel', true);
-		d3.select('#show_all_states').classed('sel', false);
-		d3.select('#wtf h2').html(states[currState].name);
-		d3.select('fieldset#state label.sel').classed('sel', false);
-		d3.select('fieldset#state label[for="state_' + currState + '"]').classed('sel', true);
-	});
 	
 	/* ************************** */
 	
@@ -58,9 +42,6 @@ d3.json('tru247.json', function(json) {
 		
 		reColorTiles(state, type);
 		d3.select('#pc2mob').attr('class', type);
-		
-		var type = types[selectedType()];
-		d3.select('#wtf .subtitle').html(type  + ' traffic daily');
 	});
 	
 	/* ************************** */
@@ -75,7 +56,7 @@ d3.json('tru247.json', function(json) {
 		d3.selectAll('#map path.state').classed('sel', false);
 		
 		reColorTiles('all', type);
-		drawMobilePie('all');
+		//drawMobilePie('all');
 		
 		d3.select('#wtf h2').html('All States');
 	});
@@ -115,15 +96,7 @@ d3.json('tru247.json', function(json) {
 		}
 		
 		var view = 'all';
-		
-		if (isOldBrowser() === false) {
-			drawHourlyChart(state, day);
-			selectHourlyChartBar(hour);
-		}
-		
-		var type = types[selectedType()];
-		d3.select('#wtf .subtitle').html(type  + ' traffic on ' + days[day].name + 's');
-	
+
 	}, function() {
 		
 		$(this).removeClass('sel');
@@ -135,11 +108,6 @@ d3.json('tru247.json', function(json) {
 		} else {
 			var state = $sel.attr('id');
 		}
-		if (isOldBrowser() === false) {
-			drawHourlyChart(state, 3);
-		}
-		var type = types[selectedType()];
-		d3.select('#wtf .subtitle').html(type  + ' traffic daily');
 	});
 });
 
@@ -186,15 +154,12 @@ function reColorTiles(state, view) {
 		}
 	}
 	flipTiles();
-	if (isOldBrowser() === false) {
-		drawHourlyChart(state, 3);
-	}
 }
 
 
 /* ************************** */
 
-
+//Inspired By: http://trends.truliablog.com/vis/tru247/
 function flipTiles() {
 
 	var oldSide = d3.select('#tiles').attr('class'),
@@ -259,5 +224,35 @@ function createTiles() {
 	}
 	
 	html += '</table>';
-	d3.select('#vis').html(html);
+	d3.select('#chart').html(html);
 }
+
+/* ************************** */
+
+function getCalcs(state, view) {
+	
+	var min = 1,
+		max = -1;
+	
+	// calculate min + max
+	for (var d = 0; d < data[state].views.length; d++) {
+		for (var h = 0; h < data[state].views[d].length; h++) {
+			
+			if (view === 'all') {
+				var tot = data[state].views[d][h].pc + data[state].views[d][h].mob;
+			} else {
+				var tot = data[state].views[d][h][view];
+			}
+			
+			if (tot > max) {
+				max = tot;
+			}
+			
+			if (tot < min) {
+				min = tot;
+			}
+		}
+	}
+	
+	return {'min': min, 'max': max};
+};
