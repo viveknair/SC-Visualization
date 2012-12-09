@@ -51,7 +51,7 @@ d3.json("justices.json", function(justices) {
       //alert("New One"+justice.justiceName);
     }
 
-    aJustice[justice.year] = {justiceName:justice.justiceName, liberalVotes:justice.liberal_votes, conservativeVotes:justice.conservative_votes};
+    aJustice[justice.year] = {justiceName:justice.justiceName, year:justice.year, liberalVotes:justice.liberal_votes, conservativeVotes:justice.conservative_votes};
   });
 
   //alert(allJudges["AFortas"][1965].conservativeVotes);
@@ -148,6 +148,9 @@ d3.json("justices.json", function(justices) {
       .text(function(d, i) { return decadeShowing+i; });
 
 
+
+
+
   function processRow(row) {
     //alert(row[1965].justiceName);
 
@@ -158,23 +161,98 @@ d3.json("justices.json", function(justices) {
     }
     row = newRow;
 
+
+    var flipper = function(justiceName, year, calcValue) {
+      if (!justiceName || !year)
+        return;
+      return function() {
+        //alert("A");
+        var sel = '#'+justiceName+year;
+        //alert(sel);
+        //if (side === 'back') {
+          //rotateY = 'rotateY(0deg)';  
+        //}
+        //if (browser.browser === 'Safari' || browser.browser === 'Chrome') {
+        //} else {
+        //  d3.select(sel).select('.' + oldSide).classed('hidden', true);
+        //d3.select(sel).select('.' + newSide).classed('hidden', false);
+        //alert("s");
+        d3.select(sel).style("fill", calcValue);
+        //}
+          
+      };
+    };
+
     //row = row.slice(1960,1960+10);
     //alert(row[5].justiceName);
     var cell = d3.select(this).selectAll(".cell")
         .data(row)
       .enter().append("rect")
         .attr("class", "cell")
+        .attr("id", function(d) {  if (d.justiceName && d.year) return d.justiceName+d.year; } )
         .attr("x", function(d, i) { return x(i); })
         .attr("width", x.rangeBand())
         .attr("height", y.rangeBand())
         //.style("fill-opacity", function(d) { return z(d.z); })
-        .style("fill", function(d) { return d.justiceName ? colorFunction(d.liberalVotes / (d.liberalVotes+d.conservativeVotes) * 100) : "#FFF"; })
+        .style("fill", function(d) {
+          if (d.justiceName){
+            var calcValue = colorFunction(d.liberalVotes / (d.liberalVotes+d.conservativeVotes) * 100);
+            setTimeout(flipper(d.justiceName,d.year, calcValue), ((d.year-decadeShowing)*30+Math.random() * 50));
+          }
+          return '#FFF'; 
+        })
 
 
 
         ;//.on("mouseover", mouseover)
         //.on("mouseout", mouseout);
   }
+
+
+
+  /* ************************** */
+
+//Inspired By: http://trends.truliablog.com/vis/tru247/
+function flipTiles() {
+
+  var oldSide = d3.select('#tiles').attr('class'),
+    newSide = '';
+  
+  if (oldSide == 'front') {
+    newSide = 'back';
+  } else {
+    newSide = 'front';
+  }
+  
+  var flipper = function(h, d, side) {
+    return function() {
+      var sel = '#d' + d + 'h' + h + ' .tile',
+        rotateY = 'rotateY(180deg)';
+      
+      if (side === 'back') {
+        rotateY = 'rotateY(0deg)';  
+      }
+      if (browser.browser === 'Safari' || browser.browser === 'Chrome') {
+        d3.select(sel).style('-webkit-transform', rotateY);
+      } else {
+        d3.select(sel).select('.' + oldSide).classed('hidden', true);
+        d3.select(sel).select('.' + newSide).classed('hidden', false);
+      }
+        
+    };
+  };
+  
+  for (var h = 0; h < hours.length; h++) {
+    for (var d = 0; d < days.length; d++) {
+      var side = d3.select('#tiles').attr('class');
+      setTimeout(flipper(h, d, side), (h * 20) + (d * 20) + (Math.random() * 100));
+    }
+  }
+  d3.select('#tiles').attr('class', newSide);
+}
+
+
+/* ************************** */
 
 
 
