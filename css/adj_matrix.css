@@ -50,9 +50,9 @@ display:inline-block;width:35px; height:35px; background: none repeat scroll 0 0
 #legend .labels{
 clear: both; list-style-type: none;padding:0; font-size:18px;
 position:absolute;
-top:35px;
+top:30px;
 /*left:0px;*/
 }
 #legend .labels>li{
-height:35px;
+height:34px;
 }
