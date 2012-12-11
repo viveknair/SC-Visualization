@@ -223,7 +223,14 @@ d3.json("data/justices.json", function(justices) {
       var block = "<li><span class='coloredBlock' style='background:"+window.colorFunction(i*10)+";'></span></li>";
       $("#coloredBlocks").append(block);
     }
-
+    $("#toTimelineFromMatrix").on('click', function(){
+      $('#mainVisualizationContainer').fadeIn();
+      $('#adjacencyMatrixContainer').hide();
+    });
+    $("#toTimelineFromTriad").on('click', function(){
+      $('#mainVisualizationContainer').fadeIn();
+      $('#triadVisualizationContainer').hide();
+    })
     window.redraw(parseInt($("#order").val()));
   }
 
