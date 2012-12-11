@@ -253,4 +253,5 @@ d3.json("data/justices.json", function(justices) {
 window.adjMatrix.initialize();
 $(document).ready(function() {
   window.adjMatrix.initializeAfterDom();
+  $('.x').find('text').each(function(){ $(this).text($(this).text().replace('-', ''))});
 });
