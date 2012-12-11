@@ -141,7 +141,10 @@ window.timeline = {
                             .enter().append("g")
                               .attr("transform", function(d){ return "translate(" + [containerWidth + descriptionMargin , y(d.year) + marginTop] + ")" })
                               .attr("class", "description_container")
-                              .on("click", function(d){ console.log("Clicked " + d.title)})
+                              .on("click", function(d){ 
+                                $('#mainVisualizationContainer').hide();
+                                $('#triadVisualizationContainer').show();
+                              })
 
     descriptionGroup.append("text")
                     .text(function(d){ return d.title})
@@ -190,7 +193,13 @@ window.timeline = {
       .attr("y", function(d,i){ if(i === 0 || i === numTicks) { return y(d) } else return y(d) })
       .attr("height", function(d,i){ if(i === y.ticks(numTicks).length - 1) { return (y(d+2) - y(d))/2; } else return y(d+2) - y(d);})  
       .on('click', function(d){
-        console.log("Clicked data point: " + d);
+        $('#mainVisualizationContainer').hide();
+        $('#adjacencyMatrixContainer').show();
+
+        // Call Forrest API
+        console.log(Math.floor(d / 10) * 10);
+        window.redraw(Math.floor(d / 10) * 10);
+    
       });
     }
 }

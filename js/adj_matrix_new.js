@@ -17,7 +17,7 @@ var x = d3.scale.ordinal().rangeBands([0, containerWidth]),
   .domain([0, 50, 100])
   .range(["blue", "#FFF", "red"]);
 
-var svg = d3.select("#chart").append("svg")
+var svg = d3.select("#adjacencyMatrixChart").append("svg")
     .attr("width", width)
     .attr("height", height)
    .append("g")
@@ -26,9 +26,10 @@ var svg = d3.select("#chart").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 window.redraw = function(decadeShowing){
-  d3.select("#chart").select("svg").remove();
+  $("#order").val(decadeShowing);
+  d3.select("#adjacencyMatrixChart").select("svg").remove();
 
-  var svg = d3.select("#chart").append("svg")
+  var svg = d3.select("#adjacencyMatrixChart").append("svg")
     .attr("width", width)
     .attr("height", height)
    .append("g")
@@ -219,7 +220,7 @@ d3.json("data/justices.json", function(justices) {
     $("#order").val(1970);
 
     for (var i = 10; i >= 0; i--){
-      var block = "<li><span class='coloredBlock' styale='background:"+window.colorFunction(i*10)+";'></span></li>";
+      var block = "<li><span class='coloredBlock' style='background:"+window.colorFunction(i*10)+";'></span></li>";
       $("#coloredBlocks").append(block);
     }
 

@@ -146,8 +146,7 @@ var triadVisualization = {
                               + ' , ' + data[j].y;
           triadResultData.push( triadRelation );
         }
-      }
-    
+      } 
       return triadResultData;    
     }
     
@@ -188,7 +187,7 @@ var triadVisualization = {
     
     // Start visualization =======>
     
-    var svg = d3.select("#chart")
+    var svg = d3.select("#triadVisualizationChart")
       .append("svg:svg")
       .attr('width', w)
       .attr('height', h);
