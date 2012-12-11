@@ -2,7 +2,7 @@ window.adjMatrix = {
 
   initialize: function(){
 var margin = {top: 0, right: 0, bottom: 10, left: 100},
-    width = 1000,
+    width =  900,
     height = 900;
 
 var containerWidth = width - 300,
@@ -15,7 +15,7 @@ var x = d3.scale.ordinal().rangeBands([0, containerWidth]),
 
   window.colorFunction = d3.scale.linear()
   .domain([0, 50, 100])
-  .range(["blue", "#FFF", "red"]);
+  .range(["#1782CF", "#FFF", "#DA0B2E"]);
 
 var svg = d3.select("#adjacencyMatrixChart").append("svg")
     .attr("width", width)
