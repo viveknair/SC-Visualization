@@ -54,6 +54,15 @@ h1,h2,h3,h4,h5,h6,div{
 	font-weight: 600;
 }
 
+.description{
+	fill:#aaa;
+}
+
+.description_container:hover{
+	fill:steelblue;
+	cursor:pointer;
+}
+
 line.y{
 	stroke:#ddd;
 }
