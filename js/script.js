@@ -2,17 +2,17 @@ window.timeline = {
 
   initialize: function(){ 
     var w = 1200,
-        h = 1500,
+        h = 1400,
         containerWidth = w - 400,
-        containerHeight = h - 200;
+        containerHeight = h - 100;
 
     var scaleWidth = w,
-        scaleHeight = 30,
+        scaleHeight = 55,
         numTicks = 40;
 
     var startingYear = 1970;
     var marginLeft = 100;
-    var marginTop = 30;
+    var marginTop = 55;
     var descriptionMargin = 10;
     var interpolation = 'linear';
     var url = "google.com";
@@ -104,6 +104,11 @@ window.timeline = {
       .attr("x2", containerWidth)
       .attr("y1", y)
       .attr("y2", y);
+
+    svg.append("text")
+      .attr('x', descriptionMargin)
+      .attr('y', containerHeight/2)
+      .text('Year')
       
     //Courts rendering
     pathsContainer.selectAll("line.court_line")
@@ -142,6 +147,9 @@ window.timeline = {
                               .attr("transform", function(d){ return "translate(" + [containerWidth + descriptionMargin , y(d.year) + marginTop] + ")" })
                               .attr("class", "description_container")
                               .on("click", function(d){ 
+                                $(".sel").removeClass('selected');
+                                $(".toTriads").addClass('selected');
+                                $('#adjacencyMatrixContainer').hide();
                                 $('#mainVisualizationContainer').hide();
                                 $('#triadVisualizationContainer').fadeIn();
                               })
@@ -156,9 +164,31 @@ window.timeline = {
 
     topScale.append("text")
       .attr("class", "header")
-      .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 10] + ")")
+      .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 25] + ")")
       .attr("x", containerWidth)
+      .style("font-weight", "600")
       .text("Highlighted Cases");
+    topScale.append("text")
+      .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 5] + ")")
+      .attr("x", containerWidth)
+      .text("(Click to see more)")
+      .style('fill', '#aaa');
+    topScale.append("text")
+      .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 30] + ")")
+      .attr("x", containerWidth/4)
+      .attr("text-anchor", 'middle')
+      .text("Liberal Case Decisions")
+      .attr('class', 'D_svg');
+
+    topScale.append("text")
+      .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 30] + ")")
+      .attr("x", 3*containerWidth/4)
+      .attr("text-anchor", 'middle')
+      .text("Conservative Case Decisions")
+      .attr('class', 'R_svg');
+
+    topScale.append("text")
+      .attr()
 
     topScale.append("svg:g")
       .attr("class", "x axis")
@@ -169,7 +199,6 @@ window.timeline = {
       .attr("class", "y axis")
       .attr("transform", "translate(0," + marginTop + ")")
       .call(yAxis);
-
 
     // Add actual data
     pathsContainer.append('path').datum(data)
@@ -193,6 +222,9 @@ window.timeline = {
       .attr("y", function(d,i){ if(i === 0 || i === numTicks) { return y(d) } else return y(d) })
       .attr("height", function(d,i){ if(i === y.ticks(numTicks).length - 1) { return (y(d+2) - y(d))/2; } else return y(d+2) - y(d);})  
       .on('click', function(d){
+        $(".sel").removeClass('selected');
+        $(".toAdjMatrix").addClass('selected');
+        $('#triadVisualizationContainer').hide();
         $('#mainVisualizationContainer').hide();
         $('#adjacencyMatrixContainer').fadeIn();
         // Call Forrest API
