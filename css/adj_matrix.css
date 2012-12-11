@@ -12,6 +12,12 @@
 	shape-rendering: crispEdges;
 }
 
+body {
+  color: #777;
+  font-family: Helvetica;
+  font-weight: 300;
+}
+
 
 
 .background {
@@ -63,9 +69,9 @@ display:inline-block;width:35px; height:35px; background: none repeat scroll 0 0
 #legend .labels{
 clear: both; list-style-type: none;padding:0; font-size:18px;
 position:absolute;
-top:30px;
+top:34px;
 /*left:0px;*/
 }
 #legend .labels>li{
-height:34px;
+height:35px;
 }
