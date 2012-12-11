@@ -36,7 +36,7 @@
   <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
   <header class="fixed top">
     <h1> Visualizing the Supreme Court </h1>
-    <a href='#'>About</a> | <a href='#'>Data Source</a>
+    <a class="toTimeline sel" href='#'>Timeline</a> | <a class="toAdjMatrix sel" href='#'>Trends in a Decade</a> | <a class="toTriads sel" href='#'>Trends in a Case</a>
   </header>
   <div>
    <div id="mainVisualizationContainer" class="view-container">
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div id = "triadVisualizationContainer" class="view-container">
-       <a id="toTimelineFromTriad" href="#">Back to Timeline</a> 
+       <!-- <a class="toTimeline" href="#">Back to Timeline</a>  -->
         <!-- Search Container -->
         <div id="searchContainer">
         
@@ -79,9 +79,9 @@
     </div>
 
     <div id = "adjacencyMatrixContainer" class="view-container">
-      <a id="toTimelineFromMatrix" href="#"> Back to Timeline</a>
-      <div style="margin:10px;">
-        <p>Court Decisions For The: <select id="order"></select></p>
+      <!-- <a class="toTimeline" href="#"> Back to Timeline</a> -->
+      <div class="sub-heading">
+        <p>Court Decisions For The <select id="order"></select></p>
       </div>
       <div style="clear:both; height:1px;width:20px;"></div>
 
@@ -90,7 +90,7 @@
 
 
       <div id="legend">
-        <p>Liberal</p>
+        <p>Conservative</p>
         <ul class="colors" id="coloredBlocks">
         </ul>
         <ul class="labels">
@@ -106,12 +106,12 @@
           <li>8</li>
           <li>10</li>
         </ul>
-        <p class="conservative">Conservative</p>
+        <p class="conservative">Liberal</p>
       </div>
       </div>
   </div>
   <footer class="fixed bottom">
-    <p> A visualization designed and implemented by Forrest Browning, Kevin Ho, and Vivek Nair for CS448B:Data Visualization.</p>
+    A visualization designed and implemented by Forrest Browning, Kevin Ho, and Vivek Nair for CS448B:Data Visualization.
   </footer>
 
 

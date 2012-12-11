@@ -142,6 +142,9 @@ window.timeline = {
                               .attr("transform", function(d){ return "translate(" + [containerWidth + descriptionMargin , y(d.year) + marginTop] + ")" })
                               .attr("class", "description_container")
                               .on("click", function(d){ 
+                                $(".sel").removeClass('selected');
+                                $(".toTriads").addClass('selected');
+                                $('#adjacencyMatrixContainer').hide();
                                 $('#mainVisualizationContainer').hide();
                                 $('#triadVisualizationContainer').fadeIn();
                               })
@@ -193,6 +196,9 @@ window.timeline = {
       .attr("y", function(d,i){ if(i === 0 || i === numTicks) { return y(d) } else return y(d) })
       .attr("height", function(d,i){ if(i === y.ticks(numTicks).length - 1) { return (y(d+2) - y(d))/2; } else return y(d+2) - y(d);})  
       .on('click', function(d){
+        $(".sel").removeClass('selected');
+        $(".toAdjMatrix").addClass('selected');
+        $('#triadVisualizationContainer').hide();
         $('#mainVisualizationContainer').hide();
         $('#adjacencyMatrixContainer').fadeIn();
         // Call Forrest API

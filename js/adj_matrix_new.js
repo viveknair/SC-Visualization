@@ -2,11 +2,11 @@ window.adjMatrix = {
 
   initialize: function(){
 var margin = {top: 0, right: 0, bottom: 10, left: 100},
-    width =  900,
-    height = 900;
+    width =  550,
+    height = 550;
 
-var containerWidth = width - 300,
-    containerHeight = height - 300;    
+var containerWidth = width - 100,
+    containerHeight = height - 100;    
 
 var x = d3.scale.ordinal().rangeBands([0, containerWidth]),
     y = d3.scale.ordinal().rangeBands([0, containerHeight]),
@@ -145,8 +145,8 @@ d3.json("data/justices.json", function(justices) {
       .attr("x1", -width);
 
   column.append("text")
-      .attr("x", x.rangeBand()/4)
-      .attr("y", x.rangeBand() / 2)
+      .attr("x", x.rangeBand()/4 - 8)
+      .attr("y", x.rangeBand() / 2 + 10)
       .attr("dy", ".32em")
       .attr("text-anchor", "start")
       .text(function(d, i) { return decadeShowing+i; });
@@ -223,13 +223,26 @@ d3.json("data/justices.json", function(justices) {
       var block = "<li><span class='coloredBlock' style='background:"+window.colorFunction(i*10)+";'></span></li>";
       $("#coloredBlocks").append(block);
     }
-    $("#toTimelineFromMatrix").on('click', function(){
+    $(".toTimeline").on('click', function(){
+      $(".sel").removeClass('selected');
+      $(this).addClass('selected');
       $('#mainVisualizationContainer').fadeIn();
       $('#adjacencyMatrixContainer').hide();
-    });
-    $("#toTimelineFromTriad").on('click', function(){
-      $('#mainVisualizationContainer').fadeIn();
       $('#triadVisualizationContainer').hide();
+    });
+    $(".toAdjMatrix").on('click', function(){
+      $(".sel").removeClass('selected');
+      $(this).addClass('selected');
+      $('#mainVisualizationContainer').hide();
+      $('#adjacencyMatrixContainer').fadeIn();
+      $('#triadVisualizationContainer').hide();
+    });
+    $(".toTriads").on('click', function(){
+      $(".sel").removeClass('selected');
+      $(this).addClass('selected');
+      $('#mainVisualizationContainer').hide();
+      $('#adjacencyMatrixContainer').hide();
+      $('#triadVisualizationContainer').fadeIn(); 
     })
     window.redraw(parseInt($("#order").val()));
   }

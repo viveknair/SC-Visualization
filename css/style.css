@@ -22,8 +22,21 @@ header{
   height:75px;
 }
 
+footer{
+  padding:10px;
+}
+
+select{
+  font-size:25px;
+}
+
 .view-container{
-  margin-top: 75px;
+  margin-top: 85px;
+}
+
+.sub-heading{
+  margin: 10px;
+  font-size: 20px;
 }
 
 /* Keho */
@@ -44,6 +57,28 @@ h1,h2,h3,h4,h5,h6,div{
   font-weight:300;
   margin-bottom:0;
 }
+
+a{
+  color: #0072C6;
+  text-decoration: none;
+}
+
+a:visited{
+  color: #0072C6;
+}
+
+a:hover{
+  color: #0072C6;
+  cursor:pointer;
+  text-decoration: underline;
+}
+
+a.selected{
+  font-weight: bold;
+  color: black;
+  cursor:normal;
+}
+
 
 .D{
 	fill:#1782CF;
@@ -268,10 +303,8 @@ text.shadow {
 /* div container containing the form  */
 #searchContainer {
     width: 500px;
-  
     margin: 0 auto;
     margin-top: 30px;
-    margin-bottom: 40px;
 }
  
 /* Style the search input field. */
@@ -392,8 +425,8 @@ text.active {
   height: 445px;
 
   position:absolute;
-  left:850px;
-  top:200px;
+  left: 700px;
+  top: 125px;
 }
 
 #legend .colors{
