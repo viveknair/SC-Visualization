@@ -15,7 +15,7 @@ var x = d3.scale.ordinal().rangeBands([0, containerWidth]),
 
   window.colorFunction = d3.scale.linear()
   .domain([0, 50, 100])
-  .range(["#1782CF", "#FFF", "#DA0B2E"]);
+  .range(["#DA0B2E", "#FFF", "#1782CF"]);
 
 var svg = d3.select("#adjacencyMatrixChart").append("svg")
     .attr("width", width)

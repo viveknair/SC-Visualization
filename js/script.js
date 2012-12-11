@@ -104,6 +104,11 @@ window.timeline = {
       .attr("x2", containerWidth)
       .attr("y1", y)
       .attr("y2", y);
+
+    svg.append("text")
+      .attr('x', descriptionMargin)
+      .attr('y', containerHeight/2)
+      .text('Year')
       
     //Courts rendering
     pathsContainer.selectAll("line.court_line")

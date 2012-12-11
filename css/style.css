@@ -231,6 +231,10 @@ h1,h2,h3,h4,h5,h6,div{
   margin-bottom:0;
 }
 
+circle{
+  stroke:none;
+}
+
 #case_main_header {
   width: 800px;
 }
@@ -265,6 +269,7 @@ text.shadow {
   stroke-width: 3px;
   stroke-opacity: .6;
 }
+
 
 .blue_individual_justice {
   color: #4682b4;
@@ -348,6 +353,7 @@ text.shadow {
 #delete #x:hover {
     color:#36c;
 }
+
 /* Syle the search button. Settings of line-height, font-size, text-indent used to hide submit value in IE */
 #submit {
     cursor:pointer; 
@@ -376,9 +382,7 @@ text.shadow {
 
 /* Forrest */
 
-*{
-	font-family:'helvetica';
-}
+
 .justice_path:hover{
 	stroke:red;
 }
@@ -389,14 +393,6 @@ text.shadow {
 	stroke-width: 2px;
 	shape-rendering: crispEdges;
 }
-
-body {
-  color: #777;
-  font-family: Helvetica;
-  font-weight: 300;
-}
-
-
 
 .background {
   fill: #eee;
