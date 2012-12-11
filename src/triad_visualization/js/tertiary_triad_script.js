@@ -41,6 +41,12 @@ var data = [
 
 //======> End Test Data 
 
+var stateContainer = {
+  arrayCaseNames: [],
+  currentCaseName: null,
+  capturedJSON: null
+};
+
 // Custom sexy colors that were hand-picked 
 // (just like Italian grapes!)
 var color_options = [
@@ -69,7 +75,7 @@ var considerationCase = {}; // [ { caseName: "WADE v. HUNTER, WARDEN", y: 0} ]
 function
 isUpperCase(char) 
 {
-  return char == char.toUpperCase();
+  return char == char.toUpperCase() && char.search(/^[a-z0-9]+$/i) != -1;
 }
 
 function
@@ -107,17 +113,20 @@ constructTriadData(data)
   // Unstable (negative) --> 3
 
   triadResultData = [];
+
   for (var i = 0; i < data.length; i ++) {
     for (var j = i + 1; j < data.length; j ++) {
       triadRelation = { sindex: i, tindex: j, stable: 1, path: ''};
 
       if ( data[i].leaning != data[j].leaning 
-           && data[i].vote == data[j].vote )  {
+           && data[i].direction == data[j].direction )  {
+        console.log("Unstable (positive) relationship");
         triadRelation.stable = 2;
       } 
 
       if (data[i].leaning == data[j].leaning 
-           && data[i].vote != data[j].vote) {
+           && data[i].direction != data[j].direction) {
+        console.log("Unstable (negative) relationship");
         triadRelation.stable = 3;
       }   
       
@@ -151,11 +160,11 @@ function
 stabilityColor(d) {
   switch(d.stable) {
     case 1:
-      return '#f7b6d2';
+      return '0,2 1 ';
     case 2:
-      return 'turquoise';
+      return '';
     default:
-      return 'red'
+      return '5,10'
   }
 }
 
@@ -164,6 +173,7 @@ setCaseName(considerationCase)
 {
   if (considerationCase.caseName) {
     $('#case_main_header').html(considerationCase.caseName);  
+    $('#main_header').html("Justice Stability");
   }
 }
 
@@ -182,17 +192,24 @@ var justiceGrouping = svg.append('svg:g')
 
 var justiceArc = justiceGrouping
   .append('svg:path')
-  .attr('d', arc)
-  .style('stroke', 'black'); 
+  .attr({
+    d: arc
+  })
+  .style({
+    stroke: 'white'
+  }); 
 
 var justiceArcEl = justiceArc.node();
 var justiceArcLength = justiceArcEl.getTotalLength();
+
 
 // End visualization =======>
 
 function
 initializeTriadViz() 
 {
+  justiceArc.style({  opacity: 0.5 });
+
   setCaseName(considerationCase);
     
   var pixelDivision = justiceArcLength / (data.length - 1);
@@ -214,7 +231,10 @@ initializeTriadViz()
     .selectAll('circle.white_justiceCircle')
     .data(data)
 
-  justiceShadowCircles.attr({
+  justiceShadowCircles
+    .transition()
+    .duration(1000)
+    .attr({
     transform: function(d,i) {
       // Setting the data location
       return 'translate(' + (d.x) + ',' + (d.y) + ')';
@@ -238,7 +258,7 @@ initializeTriadViz()
   // Deleting old nodes
   var exitShadowCircles = justiceShadowCircles.exit()
     .transition()
-    .duration(300)
+    .duration(1000)
     .style({
       opacity: 0.0
     });
@@ -250,18 +270,21 @@ initializeTriadViz()
     .data(data)
 
   // Updating the existing circles
-  justiceCircles.attr({
-    transform: function(d,i) {
-      // Setting the data location
-      return 'translate(' + (d.x) + ',' + (d.y) + ')';
-    }
-  })
+  justiceCircles
+    .transition()
+    .duration(1000)
+    .attr({
+      transform: function(d,i) {
+        // Setting the data location
+        return 'translate(' + (d.x) + ',' + (d.y) + ')';
+      }
+    })
 
   justiceCircles.enter().append('svg:circle')
     .attr({
       r: circleRadius,
       fill: function(d,i) {
-        return (d.chief == 1) ? 'steelblue' : custom_color(i);
+        return (d.leaning == 1) ? '#CC1133' : '#4682b4';
       },
       class: 'justiceCircle',
       id: function(d,i) {
@@ -281,7 +304,7 @@ initializeTriadViz()
         .transition()
         .duration(300)
         .style('opacity', function(d,i) {
-          return (d.tindex == ci || d.sindex == ci) ? 1.0 : 0.2; 
+          return ( (d.tindex == ci || d.sindex == ci) && d.stable != 1) ? 0.3 : 0.03; 
         });
 
       updateBatchPathText(triadPaths, ci);
@@ -291,18 +314,17 @@ initializeTriadViz()
       triadPaths
         .transition()
         .duration(300)
-        .style('opacity', 0.2);
+        .style('opacity', 0.03);
 
     });
 
   // Deleting old nodes
   var exitCircles = justiceCircles.exit()
     .transition()
-    .duration(300)
+    .duration(1000)
     .style({ opacity: 0.0 })
 
   exitCircles.remove()
-
 
   var justiceTexts = justiceGrouping
     .selectAll('text.shadowJusticeName')
@@ -313,6 +335,7 @@ initializeTriadViz()
 
   justiceTexts
    .enter().append('svg:text')
+    .text(function(d,i) { return d.name  })
     .attr({
       class: 'shadowJusticeName shadow',
       id: function(d,i) {
@@ -320,10 +343,11 @@ initializeTriadViz()
       },
       transform: function(d,i) {
         // Setting the data location
-        return 'translate(' + (d.x) + ',' + (d.y) + ')';
+        var text = d3.select(this);
+        var textBoundingBox = text.node().getBBox(); 
+        return 'translate(' + (d.x + textBoundingBox.width / 4) + ',' + (d.y) + ')';
       }
     })
-    .text(function(d,i) { return d.name  })
 
   justiceTexts.exit().remove();
 
@@ -336,6 +360,7 @@ initializeTriadViz()
 
   justiceShadowTexts
    .enter().append('svg:text')
+    .text(function(d,i) { return d.name  })
     .attr({
       fill: '#232323',
       class: 'primaryJusticeName',
@@ -344,10 +369,11 @@ initializeTriadViz()
       },
       transform: function(d,i) {
         // Setting the data location
-        return 'translate(' + (d.x) + ',' + (d.y) + ')';
+        var text = d3.select(this);
+        var textBoundingBox = text.node().getBBox(); 
+        return 'translate(' + (d.x + textBoundingBox.width / 4) + ',' + (d.y) + ')';
       }
     })
-    .text(function(d,i) { return d.name  })
 
   justiceShadowTexts.exit().remove();
 
@@ -468,8 +494,37 @@ updateBatchPathText(triadPaths, ci)
       triadPaths
         .transition()
         .duration(300)
-        .style('opacity', 0.08)
+        .style('opacity', 0.03)
     });  
+}
+
+function
+nextCaseAnimation() {
+  $('#nextCase').click(function() {
+    var json = stateContainer.capturedJSON;
+    var indexInto = $.inArray(stateContainer.currentCaseName, stateContainer.arrayCaseNames);
+    console.log("The indexInto is " + indexInto + " and the current case name is " + stateContainer.currentCaseName);
+    var arrayLength = stateContainer.arrayCaseNames.length;
+    if (indexInto != -1 && indexInto + 1 < arrayLength - 1)  {
+      considerationCaseName = stateContainer.arrayCaseNames[indexInto + 1]; 
+    } else {
+      considerationCaseName = stateContainer.currentCaseName;
+    }
+    parseTermJson(considerationCaseName, json, false);
+  });
+
+  $('#previousCase').click(function() {
+    var json = stateContainer.capturedJSON;
+    var indexInto = $.inArray(stateContainer.currentCaseName, stateContainer.arrayCaseNames);
+    console.log("The indexInto is " + indexInto + " and the current case name is " + stateContainer.currentCaseName);
+    var arrayLength = stateContainer.arrayCaseNames.length;
+    if (indexInto != -1 && indexInto - 1 >= 0)  {
+      considerationCaseName = stateContainer.arrayCaseNames[indexInto - 1]; 
+    } else {
+      considerationCaseName = stateContainer.currentCaseName;
+    }
+    parseTermJson(considerationCaseName, json, false);
+  });
 }
 
 function
@@ -493,22 +548,40 @@ searchAnimation()
     var searchTerm = searchTermField.val(); 
     $('#explanation_text').html("");
 
-    d3.json("data/" + searchTerm + ".json", parseTermJson);
+    d3.json("data/wade.json", function(json) {
+      var considerationCaseName = json[0].caseName;
+      parseTermJson(considerationCaseName, json, true);
+    })
   });
 }
 
 function
-parseTermJson(json)
+parseTermJson(considerationCaseName, json, shouldReset)
 {
   data = []; 
- 
-  console.log(json);
 
-  considerationCase = { caseName: json[0].caseName  }; 
+  considerationCase = { caseName: considerationCaseName }; 
+
+  // ====> State Container population
+  stateContainer.capturedJSON = json;
+  if (shouldReset) {
+    stateContainer.arrayCaseNames  = [considerationCaseName];
+  }
+  stateContainer.currentCaseName = considerationCaseName;
+  // ====> End State Container population
+
+  console.log( stateContainer.arrayCaseNames  );
+
   if (json.length > 0) {
     for (var k = 0; k < json.length; k ++) {
-      if (json[k].caseName != considerationCase.caseName )
-        break;
+      if (json[k].caseName != stateContainer.currentCaseName) {
+  
+        if ( $.inArray(json[k].caseName, stateContainer.arrayCaseNames) == -1 && shouldReset) {
+          stateContainer.arrayCaseNames.push(json[k].caseName);
+        }
+
+        continue;
+      }
 
       var formattedInformation = {};
       formattedInformation.name = json[k].justiceName;
@@ -521,7 +594,7 @@ parseTermJson(json)
       data.push(formattedInformation); 
     }
   }
-  
+
   constructAppropriateName(data);
   initializeTriadViz();
 }
@@ -544,11 +617,15 @@ triadPathsCalculate(triadPaths, justiceGrouping)
       fill: 'none',
       class: 'triadPath',
       id: function(d,i) { return 'triadPath-' + i; },
-      opacity: 0.08,
+      opacity: 0.03,
       d: function(d,i) { return d.path; } 
     })
     .style({
-      stroke: function(d,i) { return stabilityColor(d); },
+      stroke: '#AAA',
+      "stroke-width": "6",
+      "stroke-dasharray": function(d, i) {
+        return stabilityColor(d);
+      }
     })
     .on('mouseover', function(cd,ci) {
       brightPathText();
@@ -557,12 +634,12 @@ triadPathsCalculate(triadPaths, justiceGrouping)
         .transition()
         .duration(300)
         .style('opacity', function(d,i) {
-          return (i == ci) ? 1.0 : 0.08;
+          return (i == ci) ? 1.0 : 0.03;
         });
 
       justiceCircles
         .style('opacity', function(d,i) {
-          return (cd.sindex != i && cd.tindex != i) ? 0.08 : 1.0;
+          return (cd.sindex != i && cd.tindex != i) ? 0.03 : 1.0;
         })
     
       updatePathText(cd);
@@ -575,11 +652,11 @@ triadPathsCalculate(triadPaths, justiceGrouping)
       triadPaths
         .transition()
         .duration(300)
-        .style('opacity', 0.08);
+        .style('opacity', 0.03);
     })
 }
 
 $(document).ready(function() {
     searchAnimation();
-    // initializeTriadViz();
+    nextCaseAnimation();
 });

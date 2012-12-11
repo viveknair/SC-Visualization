@@ -20,13 +20,12 @@
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
-  <link rel="stylesheet" href="css/triad_style.css">
-
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
   <!-- All JavaScript at the bottom, except this Modernizr build.
        Modernizr enables HTML5 elements & feature detects for optimal performance.
        Create your own custom Modernizr build: www.modernizr.com/download/ -->
+  <link rel="stylesheet" type="text/css" href="css/triad_style.css">
   <script src="http://d3js.org/d3.v2.js"></script>
   <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 </head>
@@ -43,6 +42,12 @@
       <div id="delete"><span id="x">x</span></div>
       <input id="submit" class = "searchCases" name="submit" type="submit" value="Search" />
     </form>
+
+    <div id = "arrowContainer" >
+      <input type = "button" value = "Next" src = "/assets/right_arrow.png" id = "nextCase" />
+      <input type = "button" value = "Previous" src = "/assets/left_arrow.png" id = "previousCase" />
+    </div>
+
   </div>
   <!-- End -->
 
@@ -50,16 +55,14 @@
     <h1 id = "case_main_header"> </h2>
 
 
-    <h2 id = "main_header"> Justice Stability </h2>
+    <h2 id = "main_header">  </h2>
 
     <div id = "explanation_text" ></div>
   </div>
 
   <div id="chart"></div>
 
-  <!-- scripts concatenated and minified via build script -->
-  <script src="js/tertiary_triad_script.js"></script>
-  <!-- end scripts -->
+  <script type = "text/javascript" src = "js/tertiary_triad_script.js" > </script>
 
 </body>
 </html>
