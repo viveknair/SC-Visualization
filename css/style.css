@@ -22,8 +22,21 @@ header{
   height:75px;
 }
 
+footer{
+  padding:10px;
+}
+
+select{
+  font-size:25px;
+}
+
 .view-container{
-  margin-top: 75px;
+  margin-top: 85px;
+}
+
+.sub-heading{
+  margin: 10px;
+  font-size: 20px;
 }
 
 /* Keho */
@@ -45,6 +58,28 @@ h1,h2,h3,h4,h5,h6,div{
   margin-bottom:0;
 }
 
+a{
+  color: black;
+  text-decoration: none;
+}
+
+a:visited{
+  color: black;
+}
+
+a:hover{
+  color: #0072C6;
+  cursor:pointer;
+  text-decoration: underline;
+}
+
+a.selected{
+  font-weight: bold;
+  color: black;
+  cursor:normal;
+}
+
+
 .D{
 	fill:#1782CF;
 	stroke:#1782CF;
@@ -53,6 +88,14 @@ h1,h2,h3,h4,h5,h6,div{
 .R{
 	fill:#DA0B2E;
 	stroke:#DA0B2E;
+}
+
+.D_svg{
+  fill:#1782CF;
+}
+
+.R_svg{
+  fill:#DA0B2E;
 }
 
 .axis>path{
@@ -196,6 +239,10 @@ h1,h2,h3,h4,h5,h6,div{
   margin-bottom:0;
 }
 
+circle{
+  stroke:none;
+}
+
 #case_main_header {
   width: 800px;
 }
@@ -230,6 +277,7 @@ text.shadow {
   stroke-width: 3px;
   stroke-opacity: .6;
 }
+
 
 .blue_individual_justice {
   color: #4682b4;
@@ -268,10 +316,8 @@ text.shadow {
 /* div container containing the form  */
 #searchContainer {
     width: 500px;
-  
     margin: 0 auto;
     margin-top: 30px;
-    margin-bottom: 40px;
 }
  
 /* Style the search input field. */
@@ -315,6 +361,7 @@ text.shadow {
 #delete #x:hover {
     color:#36c;
 }
+
 /* Syle the search button. Settings of line-height, font-size, text-indent used to hide submit value in IE */
 #submit {
     cursor:pointer; 
@@ -343,9 +390,7 @@ text.shadow {
 
 /* Forrest */
 
-*{
-	font-family:'helvetica';
-}
+
 .justice_path:hover{
 	stroke:red;
 }
@@ -356,14 +401,6 @@ text.shadow {
 	stroke-width: 2px;
 	shape-rendering: crispEdges;
 }
-
-body {
-  color: #777;
-  font-family: Helvetica;
-  font-weight: 300;
-}
-
-
 
 .background {
   fill: #eee;
@@ -392,8 +429,8 @@ text.active {
   height: 445px;
 
   position:absolute;
-  left:850px;
-  top:200px;
+  left: 700px;
+  top: 125px;
 }
 
 #legend .colors{

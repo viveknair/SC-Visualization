@@ -311,9 +311,6 @@ var triadVisualization = {
             return 'translate(' + (d.x) + ',' + (d.y) + ')';
           }
         })
-        .style({
-          stroke: 'black'
-        })
         .on('mouseover', function(cd,ci) {
           clearPathText();
           triadPaths  
@@ -668,7 +665,7 @@ var triadVisualization = {
           d: function(d,i) { return d.path; } 
         })
         .style({
-          stroke: '#AAA',
+          stroke: '#333',
           "stroke-width": "6",
           "stroke-dasharray": function(d, i) {
             return stabilityColor(d);
