@@ -103,7 +103,27 @@ window.timeline = {
     .attr("x2", containerWidth)
     .attr("y1", y)
     .attr("y2", y);
+    
+  //Courts rendering
+  pathsContainer.selectAll("line.court_line")
+    .data(courts)
+    .enter().append("line")
+    .attr("transform", "translate(0," + marginTop + ")")
+    .attr("class", function(d){ return d.alignment})
+    .attr("x1", 0)
+    .attr("x2", containerWidth)
+    .attr("y1", function(d){ return y(d.year) })
+    .attr("y2", function(d){ return y(d.year) });
 
+  var courtGroup = pathsContainer.selectAll(".court")
+                      .data(courts)
+                      .enter().append("g")
+                        .attr("transform", function(d){ return "translate(" + [0 + descriptionMargin , y(d.year) + marginTop] + ")" })
+                        .attr("class", "court")
+
+  courtGroup.append("text")
+              .text(function(d){ return d.chief + " Court"})
+              .attr("class", "court")
   //Noted cases rendering
   pathsContainer.selectAll("line.case")
     .data(special_cases)
@@ -129,27 +149,6 @@ window.timeline = {
                   .text(function(d){ return d.description})
                   .attr("class", "description")
                   .attr("y", 16)
-
-  //Courts rendering
-  pathsContainer.selectAll("line.court_line")
-    .data(courts)
-    .enter().append("line")
-    .attr("transform", "translate(0," + marginTop + ")")
-    .attr("class", function(d){ return d.alignment})
-    .attr("x1", 0)
-    .attr("x2", containerWidth/2)
-    .attr("y1", function(d){ return y(d.year) })
-    .attr("y2", function(d){ return y(d.year) });
-
-  var courtGroup = pathsContainer.selectAll(".court")
-                      .data(courts)
-                      .enter().append("g")
-                        .attr("transform", function(d){ return "translate(" + [0 + descriptionMargin , y(d.year) + marginTop] + ")" })
-                        .attr("class", "court")
-
-  courtGroup.append("text")
-              .text(function(d){ return d.chief + " Court"})
-              .attr("class", "court")
 
   topScale.append("text")
     .attr("class", "header")
