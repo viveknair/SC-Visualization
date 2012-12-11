@@ -3,8 +3,29 @@ Red: #DA0B2E
 Blue #1782CF
 */
 
+
+
 *{
 	font-family:'helvetica';
+}
+body {
+  color:#777;
+  padding-left:2%;
+}
+
+h1,h2,h3,h4,h5,h6,div{
+  font-weight:300;
+  margin-bottom:0;
+}
+
+.D{
+	fill:#1782CF;
+	stroke:#1782CF;
+}
+
+.R{
+	fill:#DA0B2E;
+	stroke:#DA0B2E;
 }
 /*
 .justice_path:hover{
@@ -18,12 +39,32 @@ Blue #1782CF
 	shape-rendering: crispEdges;
 }
 
+.court{
+	font-size: 18px;
+	font-weight: normal; 
+	fill: #aaa;
+}
+
+.axis text{
+	fill: #111;
+	color: #ddd;
+}
+
+.title{
+	font-weight: 600;
+}
+
 line.y{
 	stroke:#ddd;
 }
 
 line.x{
 	stroke:#ddd;
+}
+
+line.case{
+	stroke:black;
+	stroke-width:.5px;
 }
 
 .gradient{
@@ -50,7 +91,6 @@ line.x{
 }
 .liberal{
 	fill:#1782CF;
-	opacity: .7;
 	transition: opacity .5s;
 	-moz-transition:opacity .5s;
 	-webkit-transition:opacity .5s;
@@ -59,7 +99,6 @@ line.x{
 
 .conservative{
 	fill:#DA0B2E;
-	opacity: .7;
 	transition: opacity .5s;
 	-moz-transition:opacity .5s;
 	-webkit-transition:opacity .5s;
@@ -73,6 +112,7 @@ line.x{
 .fixed{
 	position:fixed;
 	background-color: white;
+	width: 100%;
 }
 
 .top{
