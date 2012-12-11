@@ -90,6 +90,14 @@ a.selected{
 	stroke:#DA0B2E;
 }
 
+.D_svg{
+  fill:#1782CF;
+}
+
+.R_svg{
+  fill:#DA0B2E;
+}
+
 .axis>path{
 	fill:none;
 	stroke:black;

@@ -7,12 +7,12 @@ window.timeline = {
         containerHeight = h - 100;
 
     var scaleWidth = w,
-        scaleHeight = 50,
+        scaleHeight = 55,
         numTicks = 40;
 
     var startingYear = 1970;
     var marginLeft = 100;
-    var marginTop = 50;
+    var marginTop = 55;
     var descriptionMargin = 10;
     var interpolation = 'linear';
     var url = "google.com";
@@ -169,11 +169,26 @@ window.timeline = {
       .style("font-weight", "600")
       .text("Highlighted Cases");
     topScale.append("text")
-      .attr("class", "header")
       .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 5] + ")")
       .attr("x", containerWidth)
       .text("(Click to see more)")
       .style('fill', '#aaa');
+    topScale.append("text")
+      .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 30] + ")")
+      .attr("x", containerWidth/4)
+      .attr("text-anchor", 'middle')
+      .text("Liberal Case Decisions")
+      .attr('class', 'D_svg');
+
+    topScale.append("text")
+      .attr("transform", "translate(" + [marginLeft + descriptionMargin, marginTop - 30] + ")")
+      .attr("x", 3*containerWidth/4)
+      .attr("text-anchor", 'middle')
+      .text("Conservative Case Decisions")
+      .attr('class', 'R_svg');
+
+    topScale.append("text")
+      .attr()
 
     topScale.append("svg:g")
       .attr("class", "x axis")
@@ -184,7 +199,6 @@ window.timeline = {
       .attr("class", "y axis")
       .attr("transform", "translate(0," + marginTop + ")")
       .call(yAxis);
-
 
     // Add actual data
     pathsContainer.append('path').datum(data)
