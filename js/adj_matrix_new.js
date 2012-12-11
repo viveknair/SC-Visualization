@@ -185,7 +185,7 @@ d3.json("justices.json", function(justices) {
             var calcValue = colorFunction(d.liberalVotes / (d.liberalVotes+d.conservativeVotes) * 100);
             setTimeout(transition(d.justiceName,d.year,calcValue), ((d.year-decadeShowing)*30+Math.random() * 50));
           }
-          return '#FFF'; 
+          return '#DDD'; 
         })
 
 
@@ -194,51 +194,6 @@ d3.json("justices.json", function(justices) {
         //.on("mouseout", mouseout);
   }
 
-
-
-  /* ************************** */
-
-//Inspired By: http://trends.truliablog.com/vis/tru247/
-function flipTiles() {
-
-  var oldSide = d3.select('#tiles').attr('class'),
-    newSide = '';
-  
-  if (oldSide == 'front') {
-    newSide = 'back';
-  } else {
-    newSide = 'front';
-  }
-  
-  var flipper = function(h, d, side) {
-    return function() {
-      var sel = '#d' + d + 'h' + h + ' .tile',
-        rotateY = 'rotateY(180deg)';
-      
-      if (side === 'back') {
-        rotateY = 'rotateY(0deg)';  
-      }
-      if (browser.browser === 'Safari' || browser.browser === 'Chrome') {
-        d3.select(sel).style('-webkit-transform', rotateY);
-      } else {
-        d3.select(sel).select('.' + oldSide).classed('hidden', true);
-        d3.select(sel).select('.' + newSide).classed('hidden', false);
-      }
-        
-    };
-  };
-  
-  for (var h = 0; h < hours.length; h++) {
-    for (var d = 0; d < days.length; d++) {
-      var side = d3.select('#tiles').attr('class');
-      setTimeout(flipper(h, d, side), (h * 20) + (d * 20) + (Math.random() * 100));
-    }
-  }
-  d3.select('#tiles').attr('class', newSide);
-}
-
-
-/* ************************** */
 
 
 
