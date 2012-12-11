@@ -18,7 +18,7 @@
 
 var triadVisualization = {
 
-  initialize: function() { 
+  initialize: function(justiceMapping, randomCases) { 
     var w = 600;
     var h = 550;
     var containerWidth = w - 200;
@@ -555,12 +555,39 @@ var triadVisualization = {
         e.preventDefault();
         var searchTerm = searchTermField.val(); 
         $('#explanation_text').html("");
-    
-        d3.json("data/wade.json", function(json) {
-          var considerationCaseName = json[0].caseName;
-          parseTermJson(considerationCaseName, json, true);
-        })
+
+        var json = findCaseInRandom(searchTerm); 
+        var considerationCaseName = json[0].caseName;
+        parseTermJson(considerationCaseName, json, true);
       });
+    }
+
+    function findCaseInRandom(searchTerm) 
+    {
+      var constructedJson = []
+      var length =  randomCases.length;
+          
+      var considerationCase = "";
+      for (var j = 0; j < length; j ++) {
+        var loweredString = randomCases[j].caseName.toLowerCase();
+        if (loweredString.indexOf(searchTerm.toLowerCase()) != -1) {
+          considerationCase = randomCases[j].caseName; 
+          break;
+        }
+      }
+
+      if (considerationCase == "") {
+        return null;
+      }
+
+      for (var j = 0; j < length; j ++) {
+        var loweredString = randomCases[j].caseName;
+        if (considerationCase == loweredString) {
+          constructedJson.push(randomCases[j]);
+        }
+      }
+
+      return constructedJson;
     }
     
     function
@@ -596,8 +623,18 @@ var triadVisualization = {
           formattedInformation.direction = json[k].direction; 
       
           // Definitely will be changed
-          var random = Math.floor((Math.random() * 10) + 1);
-          formattedInformation.leaning = (random > 5) ? 1 : 2;
+          for (var i = 0; i < justiceMapping.length; i ++) {
+            if (justiceMapping[i].justiceName  === formattedInformation.name) {
+              formattedInformation.leaning = justiceMapping[i].status;
+              console.log('they are the same')
+              console.log('justiceMapping')
+              console.log(justiceMapping[i])
+              console.log('formattedInformation')
+              console.log(formattedInformation)
+             
+              break; 
+            }
+          }
           
           data.push(formattedInformation); 
         }
@@ -668,5 +705,9 @@ var triadVisualization = {
   
     
 $(document).ready(function() {
-  window.triadVisualization.initialize();
+  d3.json('data/justice_mapping.json', function(justiceMapping) {
+    d3.json('data/random_cases.json', function(randomCases) {
+      window.triadVisualization.initialize(justiceMapping, randomCases);
+    });
+  });
 });

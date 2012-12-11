@@ -10,7 +10,6 @@ collection = database['justice_evaluation']
 client = PG::Connection.new dbname: "assignment_4"
 
 collection.find().each do |row|
-
   date = row['_id']['date'].to_i
   justiceName = row['_id']['justiceName']
 
@@ -19,4 +18,5 @@ collection.find().each do |row|
 
   client.exec('insert into justices (justiceName, year, conservative_votes, liberal_votes) values ($1, $2, $3, $4)', [justiceName, date, conservative_votes, liberal_votes])
   
+
 end
