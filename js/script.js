@@ -143,7 +143,7 @@ window.timeline = {
                               .attr("class", "description_container")
                               .on("click", function(d){ 
                                 $('#mainVisualizationContainer').hide();
-                                $('#triadVisualizationContainer').show();
+                                $('#triadVisualizationContainer').fadeIn();
                               })
 
     descriptionGroup.append("text")
@@ -194,8 +194,7 @@ window.timeline = {
       .attr("height", function(d,i){ if(i === y.ticks(numTicks).length - 1) { return (y(d+2) - y(d))/2; } else return y(d+2) - y(d);})  
       .on('click', function(d){
         $('#mainVisualizationContainer').hide();
-        $('#adjacencyMatrixContainer').show();
-
+        $('#adjacencyMatrixContainer').fadeIn();
         // Call Forrest API
         console.log(Math.floor(d / 10) * 10);
         window.redraw(Math.floor(d / 10) * 10);

@@ -34,81 +34,85 @@
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
        chromium.org/developers/how-tos/chrome-frame-getting-started -->
   <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-
- <div id = "mainVisualizationContainer" >
-  <div class="fixed top" >
+  <header class="fixed top">
     <h1> Visualizing the Supreme Court </h1>
-      <div id="fixed-scale"></div>
-  </div>
-  <div id="chart" role="main">
-  </div>
-</div>
-
-
-  <div id = "triadVisualizationContainer" >
-    <h1> CS448B Final Project | <span class = "motif_header"> Motif Analysis </span></h1>
-  
-    <!-- Search Container -->
-    <div id="searchContainer">
-      <form>
-        <input id="searchTermField" name="field" type="text" />
-        <div id="delete"><span id="x">x</span></div>
-        <input id="submit" class = "searchCases" name="submit" type="submit" value="Search" />
-      </form>
-  
-      <div id = "arrowContainer" >
-        <input type = "button" value = "Next" src = "/assets/right_arrow.png" id = "nextCase" />
-        <input type = "button" value = "Previous" src = "/assets/left_arrow.png" id = "previousCase" />
+    <a href='#'>About</a> | <a href='#'>Data Source</a>
+  </header>
+  <div>
+   <div id="mainVisualizationContainer" class="view-container">
+      <div class="fixed scale-container" >
+          <div id="fixed-scale"></div>
       </div>
-  
+      <div id="chart" role="main">
+      </div>
     </div>
-    <!-- End -->
-  
-    <div id="explanation">
-      <h1 id = "case_main_header"> </h2>
-  
-  
-      <h2 id = "main_header">  </h2>
-  
-      <div id = "explanation_text" ></div>
+    <div id = "triadVisualizationContainer" class="view-container">
+       <a id="toTimelineFromTriad" href="#">Back to Timeline</a> 
+        <!-- Search Container -->
+        <div id="searchContainer">
+        
+          <form>
+            <input id="searchTermField" name="field" type="text" />
+            <div id="delete"><span id="x">x</span></div>
+            <input id="submit" class = "searchCases" name="submit" type="submit" value="Search" />
+          </form>
+      
+          <div id = "arrowContainer" >
+            <input type = "button" value = "Next" src = "/assets/right_arrow.png" id = "nextCase" />
+            <input type = "button" value = "Previous" src = "/assets/left_arrow.png" id = "previousCase" />
+          </div>
+
+        </div>
+        <!-- End -->
+    
+      <div id="explanation">
+        <h1 id = "case_main_header"> </h2>
+    
+    
+        <h2 id = "main_header">  </h2>
+    
+        <div id = "explanation_text" ></div>
+      </div>
+    
+      <div id="triadVisualizationChart"></div>
+
     </div>
-  
-    <div id="triadVisualizationChart"></div>
+    
+    <div id = "adjacencyMatrixContainer" class="view-container">
+      <a id="toTimelineFromMatrix" href="#"> Back to Timeline</a>
+      <div style="margin:10px;">
+        <p>Court Decisions For The: <select id="order"></select></p>
+      </div>
+      <div style="clear:both; height:1px;width:20px;"></div>
 
+      <div id="adjacencyMatrixChart" role="main" class="rbow2">
+      </div>
+
+
+      <div id="legend">
+        <p>Liberal</p>
+        <ul class="colors" id="coloredBlocks">
+        </ul>
+        <ul class="labels">
+          <li>10</li>
+          <li>8</li>
+          <li>6</li>
+          <li>4</li>
+          <li>2</li>
+          <li>0</li>
+          <li>2</li>
+          <li>4</li>
+          <li>6</li>
+          <li>8</li>
+          <li>10</li>
+        </ul>
+        <p class="conservative">Conservative</p>
+      </div>
+      </div>
   </div>
-
-<div id = "adjacencyMatrixContainer" >
-  <h1>ADJACENCY MATRIX</h1>
-
-  <div style="margin:10px;">
-    <p>Court Decisions For The: <select id="order"></select></p>
-  </div>
-  <div style="clear:both; height:1px;width:20px;"></div>
-
-  <div id="adjacencyMatrixChart" role="main" class="rbow2">
-  </div>
-
-
-  <div id="legend">
-    <ul class="colors" id="coloredBlocks">
-    </ul>
-
-    <ul class="labels">
-      <li>10</li>
-      <li>8</li>
-      <li>6</li>
-      <li>4</li>
-      <li>2</li>
-      <li>0</li>
-      <li>2</li>
-      <li>4</li>
-      <li>6</li>
-      <li>8</li>
-      <li>10</li>
-    </ul>
-  </div>
-</div>
-
+  <footer class="fixed bottom">
+    <p> A visualization designed and implemented by Forrest Browning, Kevin Ho, and Vivek Nair for CS448B:Data Visualization.</p>
+  </footer>
 
 
   <!-- scripts concatenated and minified via build script -->

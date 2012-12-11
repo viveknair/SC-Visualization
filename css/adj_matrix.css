@@ -36,7 +36,7 @@ text.active {
 #legend {
 	background: none repeat scroll 0 0 #F0F0F0;
   border: 1px solid #E0E0E0;
-  border-radius: 8px;
+  /*border-radius: 8px;*/
   /*clear: left;*/
   color: #777777;
   font-size: 11px;
@@ -47,9 +47,9 @@ text.active {
   width: 70px;
   height: 450px;
 
-  position:absolute;
+  /*position:absolute;
   left:850px;
-  top:200px;
+  top:200px;*/
 }
 
 #legend .colors{
