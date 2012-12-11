@@ -96,11 +96,28 @@ pathsContainer.append("svg:g")
 	.attr("transform", "translate(0," + marginTop + ")")
 	.call(yAxis);
 
-pathsContainer.selectAll("path.justice_path").data(data).enter().append("svg:path")
-	.attr("d", function(d,i){ return line(d); })
-	.attr("class", "justice_path")
-	.attr("transform", "translate(0," + marginTop + ")")
-	.style("stroke-width", 5)
-  .style("stroke", "steelblue")
-  .style("fill", "none")
-  	.on("mouseover", function(){ d3.select(this).attr('stroke', 'red')});
+// Add actual data
+pathsContainer.append('path').datum(liberalData)
+                .attr('class', 'cases liberal')
+                .attr('d', function(d){ return liberalArea(d)})
+                .attr('transform', 'rotate(90) translate(' + [marginTop, -containerWidth] +')');
+
+pathsContainer.append('path').datum(conservativeData)
+                .attr('class', 'cases conservative')
+                .attr('d', function(d){ return conservativeArea(d)})
+                .attr('transform', 'rotate(90) translate(' + [marginTop, -containerWidth] +')');
+
+//Adding hoverable decades
+
+pathsContainer.selectAll("rect")
+  .data(y.ticks(numTicks))
+  .enter().append("rect")
+  .attr('class', 'decadeSelector')
+  .attr("transform", "translate(0," + marginTop + ")")
+  .attr("x", 0)
+  .attr("width", containerWidth)
+  .attr("y", function(d,i){ return y(d) - (containerHeight/numTicks)/2})
+  .attr("height", function(d,i){ if(i === 0 || i === numTicks - 1) { return containerHeight/numTicks/2; } else return containerHeight/numTicks;})  
+  .on('click', function(d){
+    console.log("Clicked data point: " + d);
+  });
