@@ -1,0 +1,155 @@
+body {
+  font-family: Helvetica;
+  color:#777;
+  padding-left:2%;
+}
+
+h1,h2,h3,h4,h5,h6,div{
+  font-weight: 300;
+  margin-bottom:0;
+}
+
+#case_main_header {
+  width: 800px;
+}
+
+li.stable {
+  color: 'green';
+}
+
+li.unstable_p {
+  color: '#000';
+}
+
+li.unstable_n {
+  color: '#CC1133';
+}
+
+#chart {
+  position: relative;
+  width: 600px;
+  font: 13px sans-serif;
+}
+
+#explanation {
+  width: 500px;
+  position: relative;
+  right: 300px;
+  float: right;
+}
+
+text.shadow {
+  stroke: #fff;
+  stroke-width: 3px;
+  stroke-opacity: .6;
+}
+
+.blue_individual_justice {
+  color: #4682b4;
+}
+
+.red_individual_justice {
+  color: #CC1133;
+}
+
+.motif_header {
+  color: #4682b4;
+}
+
+.stability_result {
+  font-size: 20px; 
+  position: relative;
+  top: 50px;
+  left: 80px;
+}
+
+.justice_listing li:hover {
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+
+.justice_listing {
+  list-style-type: none;
+}
+
+.justice_listing li {
+  padding: 5px;
+}
+
+/* =============>  Search Container
+
+/* div container containing the form  */
+#searchContainer {
+    width: 500px;
+  
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+ 
+/* Style the search input field. */
+#searchTermField {
+    float:left; 
+    width:300px; 
+    height:27px; 
+    line-height:27px;
+    text-indent:10px; 
+    font-family:arial, sans-serif; 
+    font-size:1em; 
+    color:#333; 
+    background: #fff; 
+    border:solid 1px #d9d9d9; 
+    border-top:solid 1px #c0c0c0; 
+    border-right:none;
+}
+ 
+/* Style the "X" text button next to the search input field */
+#delete {
+    float:left; 
+    width:16px;
+    height:29px; 
+    line-height:27px; 
+    margin-right:15px; 
+    padding:0 10px 0 10px;
+    font-family: "Lucida Sans", "Lucida Sans Unicode",sans-serif;
+    font-size:22px; 
+    background: #fff;  
+    border:solid 1px #d9d9d9; 
+    border-top:solid 1px #c0c0c0; 
+    border-left:none;
+}
+/* Set default state of "X" and hide it */
+#delete #x {
+    color:#A1B9ED; 
+    cursor:pointer;
+    display:none;
+}
+/* Set the hover state of "X" */
+#delete #x:hover {
+    color:#36c;
+}
+/* Syle the search button. Settings of line-height, font-size, text-indent used to hide submit value in IE */
+#submit {
+    cursor:pointer; 
+    width:70px; 
+    height: 31px; 
+    line-height:0; 
+    font-size:0; 
+    text-indent:-999px;
+    color: transparent;  
+    background: url(../images/ico-search.png) no-repeat #4d90fe center; 
+    border: 1px solid #3079ED; 
+    -moz-border-radius: 2px; 
+    -webkit-border-radius: 2px; 
+}
+/* Style the search button hover state */
+#submit:hover {
+    background: url(../images/ico-search.png) no-repeat center #357AE8; 
+    border: 1px solid #2F5BB7;
+}
+/* Clear floats */
+.fclear {clear:both}
+
+.triadPath {
+  stroke-width: "8";
+}
