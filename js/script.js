@@ -1,4 +1,3 @@
-/* Constants and data*/
 window.timeline = {
   initialize: function(){ var w = 1200,
       h = 1500,
