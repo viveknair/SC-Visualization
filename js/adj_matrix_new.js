@@ -33,7 +33,7 @@ function redraw(decadeShowing){
     .attr('height', containerHeight)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("justices.json", function(justices) {
+d3.json("data/justices.json", function(justices) {
   justices = justices.filter(function(justice){ return (justice.year-decadeShowing <= 9 && justice.year-decadeShowing >= 0); });
 
   var matrix = [],
