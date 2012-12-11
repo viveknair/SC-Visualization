@@ -2,9 +2,9 @@ window.timeline = {
 
   initialize: function(){ 
     var w = 1200,
-        h = 1500,
+        h = 1400,
         containerWidth = w - 400,
-        containerHeight = h - 200;
+        containerHeight = h - 100;
 
     var scaleWidth = w,
         scaleHeight = 30,
