@@ -18,7 +18,15 @@
 
 var triadVisualization = {
 
+  randomCases: null,
+
+  getRandomCases: function() {
+    return this.randomCases;
+  },
+
   initialize: function(justiceMapping, randomCases) { 
+    this.randomCases = randomCases;
+
     var w = 600;
     var h = 550;
     var containerWidth = w - 200;
@@ -511,7 +519,6 @@ var triadVisualization = {
       $('#nextCase').click(function() {
         var json = stateContainer.capturedJSON;
         var indexInto = $.inArray(stateContainer.currentCaseName, stateContainer.arrayCaseNames);
-        console.log("The indexInto is " + indexInto + " and the current case name is " + stateContainer.currentCaseName);
         var arrayLength = stateContainer.arrayCaseNames.length;
         if (indexInto != -1 && indexInto + 1 < arrayLength - 1)  {
           considerationCaseName = stateContainer.arrayCaseNames[indexInto + 1]; 
@@ -524,7 +531,6 @@ var triadVisualization = {
       $('#previousCase').click(function() {
         var json = stateContainer.capturedJSON;
         var indexInto = $.inArray(stateContainer.currentCaseName, stateContainer.arrayCaseNames);
-        console.log("The indexInto is " + indexInto + " and the current case name is " + stateContainer.currentCaseName);
         var arrayLength = stateContainer.arrayCaseNames.length;
         if (indexInto != -1 && indexInto - 1 >= 0)  {
           considerationCaseName = stateContainer.arrayCaseNames[indexInto - 1]; 
@@ -557,8 +563,12 @@ var triadVisualization = {
         $('#explanation_text').html("");
 
         var json = findCaseInRandom(searchTerm); 
-        var considerationCaseName = json[0].caseName;
-        parseTermJson(considerationCaseName, json, true);
+        if ( json ) {
+          var considerationCaseName = json[0].caseName;
+          parseTermJson(considerationCaseName, json, true);
+        } else {
+          alert('No cases found with that search term.');
+        }
       });
     }
 
@@ -605,8 +615,6 @@ var triadVisualization = {
       stateContainer.currentCaseName = considerationCaseName;
       // ====> End State Container population
     
-      console.log( stateContainer.arrayCaseNames  );
-    
       if (json.length > 0) {
         for (var k = 0; k < json.length; k ++) {
           if (json[k].caseName != stateContainer.currentCaseName) {
@@ -626,12 +634,6 @@ var triadVisualization = {
           for (var i = 0; i < justiceMapping.length; i ++) {
             if (justiceMapping[i].justiceName  === formattedInformation.name) {
               formattedInformation.leaning = justiceMapping[i].status;
-              console.log('they are the same')
-              console.log('justiceMapping')
-              console.log(justiceMapping[i])
-              console.log('formattedInformation')
-              console.log(formattedInformation)
-             
               break; 
             }
           }
@@ -705,9 +707,12 @@ var triadVisualization = {
   
     
 $(document).ready(function() {
+
+  // Loading in the justice mappings and random cases.
   d3.json('data/justice_mapping.json', function(justiceMapping) {
     d3.json('data/random_cases.json', function(randomCases) {
       window.triadVisualization.initialize(justiceMapping, randomCases);
+      window.triadVisualization.getRandomCases();
     });
   });
 });

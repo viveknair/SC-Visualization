@@ -144,6 +144,9 @@ window.timeline = {
                               .on("click", function(d){ 
                                 $('#mainVisualizationContainer').hide();
                                 $('#triadVisualizationContainer').fadeIn();
+
+                                $('#searchTermField').val(d.title);
+                                $('#submit').trigger('click');
                               })
 
     descriptionGroup.append("text")
