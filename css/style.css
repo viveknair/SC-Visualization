@@ -18,6 +18,14 @@ Blue #1782CF
   padding-left: 75px;
 }
 
+header{
+  height:75px;
+}
+
+.view-container{
+  margin-top: 75px;
+}
+
 /* Keho */
 
 *{
@@ -140,6 +148,10 @@ line.case{
 	width: 100%;
 }
 
+.scale-container{
+  top:75px;
+}
+
 #fixed-scale {
   position: relative;
   top: 4px;
@@ -147,6 +159,10 @@ line.case{
 
 .top{
 	top:0;
+}
+
+.bottom{
+  bottom:0;
 }
 
 .decadeSelector{
