@@ -1,3 +1,6 @@
+window.adjMatrix = {
+
+  initialize: function(){
 var margin = {top: 0, right: 0, bottom: 10, left: 100},
     width = 1000,
     height = 900;
@@ -10,7 +13,7 @@ var x = d3.scale.ordinal().rangeBands([0, containerWidth]),
     //z = d3.scale.linear().domain([0, 4]).clamp(true),
     c = d3.scale.category10().domain(d3.range(100));
 
-var colorFunction = d3.scale.linear()
+  window.colorFunction = d3.scale.linear()
   .domain([0, 50, 100])
   .range(["blue", "#FFF", "red"]);
 
@@ -22,7 +25,7 @@ var svg = d3.select("#chart").append("svg")
     .attr('height', containerHeight)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-function redraw(decadeShowing){
+window.redraw = function(decadeShowing){
   d3.select("#chart").select("svg").remove();
 
   var svg = d3.select("#chart").append("svg")
@@ -201,25 +204,32 @@ d3.json("data/justices.json", function(justices) {
 
 }
 
-d3.select("#order").on("change", function() {
-  redraw(parseInt(this.value));
-  //clearTimeout(timeout);
-  //order(this.value);
-});
+  d3.select("#order").on("change", function() {
+    window.redraw(parseInt(this.value));
+    //clearTimeout(timeout);
+    //order(this.value);
+  });
+  },
 
+  initializeAfterDom: function() {
+    for (var i = 4; i < 12; i++){
+      var links = "<option value="+(1900+i*10)+">"+(1900+i*10)+"'s</option>";
+      $("#order").append(links);
+    }
+    $("#order").val(1970);
+
+    for (var i = 10; i >= 0; i--){
+      var block = "<li><span class='coloredBlock' styale='background:"+window.colorFunction(i*10)+";'></span></li>";
+      $("#coloredBlocks").append(block);
+    }
+
+    window.redraw(parseInt($("#order").val()));
+  }
+
+};
+
+
+window.adjMatrix.initialize();
 $(document).ready(function() {
-
-  for (var i = 4; i < 12; i++){
-    var links = "<option value="+(1900+i*10)+">"+(1900+i*10)+"'s</option>";
-    $("#order").append(links);
-  }
-  $("#order").val(1970);
-
-  for (var i = 10; i >= 0; i--){
-    var block = "<li><span class='coloredBlock' style='background:"+colorFunction(i*10)+";'></span></li>";
-    $("#coloredBlocks").append(block);
-  }
-
-  redraw(parseInt($("#order").val()));
+  window.adjMatrix.initializeAfterDom();
 });
-
