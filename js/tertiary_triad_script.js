@@ -176,11 +176,13 @@ var triadVisualization = {
     stabilityColor(d) {
       switch(d.stable) {
         case 1:
-          return '0,2 1 ';
-        case 2:
           return '';
+        case 2:
+          return '0,2 1';
+        case 3:
+          return '5,10';
         default:
-          return '5,10'
+          return '';
       }
     }
     
