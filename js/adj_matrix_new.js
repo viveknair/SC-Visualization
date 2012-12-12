@@ -151,7 +151,23 @@ d3.json("data/justices.json", function(justices) {
       .attr("text-anchor", "start")
       .text(function(d, i) { return decadeShowing+i; });
 
-
+        $('.cell').tipsy({ 
+          gravity: 'w', 
+            html: true, 
+            title: function() {
+              if (d3.select(this).attr("year") == undefined)
+                return "";
+              //alert(d3.select(this));
+          //alert(this);
+          //window.what=this;
+          //alert(d3.select(this).attr("name"));
+              var d = this.__data__, c = "#DA0B2E";
+              return d3.select(this).attr("year")+'   <span style="font-weight:bold;color:' + c + '">' 
+              + "Conservative:"+'</span>'+'<span style="color:' + "#FFFFFF" + '">' +d3.select(this).attr("numConservativeVotes")+'</span>'
+              +'<span style="font-weight:bold;color:' + "#1782CF" + '">' +" Liberal:"+'</span>'+'<span style="color:' + "#FFFFFF" + '">' +d3.select(this).attr("numLiberalVotes")+'</span>'
+              ;//+" Liberal:"+d3.select(this).attr("numLiberalVotes") +'</span>'; 
+            }
+        });
 
 
 
@@ -184,6 +200,10 @@ d3.json("data/justices.json", function(justices) {
         .attr("width", x.rangeBand())
         .attr("height", y.rangeBand())
         //.style("fill-opacity", function(d) { return z(d.z); })
+        .attr("name", function(d) {return d.justiceName})
+        .attr("year", function(d) {return d.year})
+        .attr("numConservativeVotes", function(d) {return d.conservativeVotes})
+        .attr("numLiberalVotes", function(d) {return d.liberalVotes})
         .style("fill", function(d) {
           if (d.justiceName){
             var calcValue = colorFunction(d.liberalVotes / (d.liberalVotes+d.conservativeVotes) * 100);
