@@ -21,6 +21,7 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
   <link rel="stylesheet" href="css/style.css">
+  <link href="css/tipsy.css" rel="stylesheet" type="text/css" />
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
@@ -91,6 +92,7 @@
 
       <div id="legend">
         <p>Liberal</p>
+        <p style="position:absolute; top:60px; left:90px;">Higher Ratio Of Liberal To Conservative Votes</p>
         <ul class="colors" id="coloredBlocks">
         </ul>
         <ul class="labels">
@@ -106,6 +108,7 @@
           <li>8</li>
           <li>10</li>
         </ul>
+        <p style="position:absolute; left:90px; bottom:60px;">Higher Ratio Of Conservative To Liberal Votes</p>
         <p class="conservative">Conservative</p>
       </div>
       </div>
@@ -116,6 +119,7 @@
 
 
   <!-- scripts concatenated and minified via build script -->
+   <script type="text/javascript" src="js/jquery.tipsy.js"></script>
   <script src="js/script.js"></script>
   <script type = "text/javascript" src = "js/tertiary_triad_script.js" > </script>
   <script src="js/adj_matrix_new.js"></script>

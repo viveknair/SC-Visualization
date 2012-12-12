@@ -417,7 +417,7 @@ text.active {
   margin: 10px 24px;
   overflow: hidden;
   padding: 5px 7px;
-  width: 70px;
+  width: 180px;
   height: 445px;
 
   position:absolute;
@@ -429,7 +429,7 @@ text.active {
 clear: both; list-style-type: none; overflow: hidden; padding:0; font-size:18px;
 position:absolute;
 top:20px;
-right:10px;
+left:40px;
 }
 #legend .colors>li{
 margin-bottom:-1px;
