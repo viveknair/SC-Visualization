@@ -37,27 +37,25 @@ var triadVisualization = {
     var marginTop = 100;
     var distanceJudges = 30;
     var circleRadius = 20;
-    
-    //======> Start Test Data
-    var data = [
-      { chief: 0, leaning: 1, direction: 1, name: "FFrankfurter" },
-      { chief: 1, leaning: 0, direction: 1, name: "FMVinson" },
-      { chief: 0, leaning: 1, direction: 2, name: "FMurphy" },
-      { chief: 0, leaning: 0, direction: 1, name: "HHBurton" },
-      { chief: 0, leaning: 1, direction: 1, name: "HLBlack" },
-      { chief: 0, leaning: 0, direction: 1, name: "RHJackson" },
-      { chief: 0, leaning: 0, direction: 1, name: "SFReed" },
-      { chief: 0, leaning: 1, direction: 1, name: "WBRutledge" },
-      { chief: 0, leaning: 1, direction: 2, name: "WODouglas" }
-    ]
-    
-    //======> End Test Data 
+    var data = [];    
     
     var stateContainer = {
       arrayCaseNames: [],
       currentCaseName: null,
       capturedJSON: null
     };
+
+//    var data = [
+//       { chief: 0, leaning: 1, direction: 1, name: "FFrankfurter" },
+//       { chief: 1, leaning: 0, direction: 1, name: "FMVinson" },
+//       { chief: 0, leaning: 1, direction: 2, name: "FMurphy" },
+//       { chief: 0, leaning: 0, direction: 1, name: "HHBurton" },
+//       { chief: 0, leaning: 1, direction: 1, name: "HLBlack" },
+//       { chief: 0, leaning: 0, direction: 1, name: "RHJackson" },
+//       { chief: 0, leaning: 0, direction: 1, name: "SFReed" },
+//       { chief: 0, leaning: 1, direction: 1, name: "WBRutledge" },
+//       { chief: 0, leaning: 1, direction: 2, name: "WODouglas" }
+//     ]
     
     // Custom sexy colors that were hand-picked 
     // (just like Italian grapes!)
@@ -69,20 +67,9 @@ var triadVisualization = {
       '#f7b6d2', '#7f7f7f', '#c7c7c7', 
       '#17becf', '#9edae5'
     ]
- 
-
 
     searchAnimation();
-    nextCaseAnimation();
 
-    color_options = color_options.reverse()
-    function justiceNameMapper(datum) { return datum.name }
-    var justiceNames = data.map( justiceNameMapper );
-    
-    var custom_color = d3.scale.ordinal()
-      .domain(justiceNames)
-      .range(color_options)
-    
     var justiceCircles;
     
     var caseX = w / 2;
@@ -224,7 +211,7 @@ var triadVisualization = {
     // End visualization =======>
     
     function
-    initializeTriadViz() 
+    initializeTriadViz(data) 
     {
       justiceArc.style({  opacity: 0.5 });
     
@@ -302,7 +289,9 @@ var triadVisualization = {
         .attr({
           r: circleRadius,
           fill: function(d,i) {
-            return (d.leaning == 1) ? '#CC1133' : '#4682b4';
+            console.log("Fill for the justices");
+            console.log(d.leaning);
+            return (d.leaning == 0) ? '#CC1133' : '#4682b4';
           },
           class: 'justiceCircle',
           id: function(d,i) {
@@ -318,9 +307,16 @@ var triadVisualization = {
           triadPaths  
             .transition()
             .duration(300)
-            .style('opacity', function(d,i) {
-              return ( (d.tindex == ci || d.sindex == ci) && d.stable != 1) ? 0.3 : 0.03; 
+            .style({
+              opacity: function(d,i) {
+                return ( (d.tindex == ci || d.sindex == ci) && d.stable != 1) ? 0.3 : 0.03; 
+              },
+             'stroke-dasharray': function(d, i) {
+               return stabilityColor(d);
+             }
             });
+
+
     
           updateBatchPathText(triadPaths, ci);
           brightPathText();
@@ -418,8 +414,8 @@ var triadVisualization = {
       var firstJusticeName = data[triadRelation.sindex].name;
       var secondJusticeName = data[triadRelation.tindex].name;
     
-      var leaningClassFirst = (data[triadRelation.sindex].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
-      var leaningClassSecond = (data[triadRelation.tindex].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
+      var leaningClassFirst = (data[triadRelation.sindex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
+      var leaningClassSecond = (data[triadRelation.tindex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
       var constructedString = "<h3> <span class = '" + leaningClassFirst  + "' > Justice " + firstJusticeName + "</span> and <span class = '" + leaningClassSecond + "'> Justice " + secondJusticeName + "</span> have a(n): </h3> <h1 class = 'stability_result'>"; 
       if (triadRelation.stable == 1) {
         constructedString += "<span class = 'stable'>stable</span>"
@@ -436,7 +432,7 @@ var triadVisualization = {
     function
     updateBatchPathText(triadPaths, ci)
     {
-      var leaningClassFirst = (data[ci].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
+      var leaningClassFirst = (data[ci].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
       var constructedString = "<h3> <span class = '" + leaningClassFirst  +  "' > Justice " + data[ci].name + " has a(n): </h3><ul class = 'justice_listing'></ul>" ; 
       $('#explanation_text').append(constructedString);
       var listElements = [];
@@ -455,7 +451,7 @@ var triadVisualization = {
             stability = "unstable (negative) ";
           }
     
-          var otherIndexClass = (data[otherIndex].leaning == 1) ? 'red_individual_justice' : 'blue_individual_justice'; 
+          var otherIndexClass = (data[otherIndex].leaning == 0) ? 'red_individual_justice' : 'blue_individual_justice'; 
           var tempString = "<li>" 
                               + stability + "relationship with <span class = '" 
                               + otherIndexClass + "'>" + data[otherIndex].name 
@@ -511,33 +507,6 @@ var triadVisualization = {
             .duration(300)
             .style('opacity', 0.1)
         });  
-    }
-    
-    function
-    nextCaseAnimation() {
-      $('#nextCase').click(function() {
-        var json = stateContainer.capturedJSON;
-        var indexInto = $.inArray(stateContainer.currentCaseName, stateContainer.arrayCaseNames);
-        var arrayLength = stateContainer.arrayCaseNames.length;
-        if (indexInto != -1 && indexInto + 1 < arrayLength - 1)  {
-          considerationCaseName = stateContainer.arrayCaseNames[indexInto + 1]; 
-        } else {
-          considerationCaseName = stateContainer.currentCaseName;
-        }
-        parseTermJson(considerationCaseName, json, false);
-      });
-    
-      $('#previousCase').click(function() {
-        var json = stateContainer.capturedJSON;
-        var indexInto = $.inArray(stateContainer.currentCaseName, stateContainer.arrayCaseNames);
-        var arrayLength = stateContainer.arrayCaseNames.length;
-        if (indexInto != -1 && indexInto - 1 >= 0)  {
-          considerationCaseName = stateContainer.arrayCaseNames[indexInto - 1]; 
-        } else {
-          considerationCaseName = stateContainer.currentCaseName;
-        }
-        parseTermJson(considerationCaseName, json, false);
-      });
     }
     
     function
@@ -642,7 +611,7 @@ var triadVisualization = {
       }
     
       constructAppropriateName(data);
-      initializeTriadViz();
+      initializeTriadViz(data);
     }
     
     function
@@ -711,7 +680,6 @@ $(document).ready(function() {
   d3.json('data/justice_mapping.json', function(justiceMapping) {
     d3.json('data/random_cases.json', function(randomCases) {
       window.triadVisualization.initialize(justiceMapping, randomCases);
-      window.triadVisualization.getRandomCases();
     });
   });
 });
