@@ -279,6 +279,11 @@ var triadVisualization = {
         .transition()
         .duration(1000)
         .attr({
+          fill: function(d,i) {
+            console.log("Fill for the justices");
+            console.log(d.leaning);
+            return (d.leaning == 0) ? '#CC1133' : '#4682b4';
+          },
           transform: function(d,i) {
             // Setting the data location
             return 'translate(' + (d.x) + ',' + (d.y) + ')';
@@ -600,8 +605,11 @@ var triadVisualization = {
       
           // Definitely will be changed
           for (var i = 0; i < justiceMapping.length; i ++) {
+            console.log("The justice mapping is " + justiceMapping[i].status);
+            console.log(justiceMapping[i].justiceName + " " + formattedInformation.name);
             if (justiceMapping[i].justiceName  === formattedInformation.name) {
               formattedInformation.leaning = justiceMapping[i].status;
+              console.log("MATCH");
               break; 
             }
           }
@@ -618,8 +626,19 @@ var triadVisualization = {
     triadPathsCalculate(triadPaths, justiceGrouping)
     {
       triadPaths
+        .attr({
+          fill: 'none',
+          class: 'triadPath',
+          id: function(d,i) { return 'triadPath-' + i; },
+          opacity: 0.1,
+          d: function(d,i) { return d.path; } 
+        })
         .style({
           stroke: function(d,i) { return stabilityColor(d); },
+          "stroke-width": "6",
+          "stroke-dasharray": function(d, i) {
+            return stabilityColor(d);
+          }
         })
         .transition()
        .duration(300)
