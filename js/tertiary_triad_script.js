@@ -97,7 +97,7 @@ var triadVisualization = {
           }
         }
         data[i].name = constructedString;
-      } 
+      }
     }
     
     
@@ -139,6 +139,7 @@ var triadVisualization = {
           triadRelation.path =  'M ' + data[i].x + ' ' + data[i].y + ' A ' 
                               + dri + ' , ' + dri + " 0 0,0 " + data[j].x 
                               + ' , ' + data[j].y;
+
           triadResultData.push( triadRelation );
         }
       } 
@@ -163,11 +164,11 @@ var triadVisualization = {
     stabilityColor(d) {
       switch(d.stable) {
         case 1:
-          return '';
+          return '5,10';
         case 2:
           return '0,2 1';
         case 3:
-          return '5,10';
+          return '';
         default:
           return '';
       }
